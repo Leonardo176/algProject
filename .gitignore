@@ -8,3 +8,12 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Latex auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+.fls
+.fdb_latexmk
