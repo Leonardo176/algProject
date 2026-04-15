@@ -15,5 +15,9 @@ wheels/
 *.out
 *.toc
 *.synctex.gz
-.fls
-.fdb_latexmk
+*.fls
+*.fdb_latexmk
+*.lof
+*.lot
+*.bbl
+*.blg
