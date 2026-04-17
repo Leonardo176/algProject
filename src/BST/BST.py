@@ -6,9 +6,18 @@ if __name__ == "__main__":
     exit(-1)
 
 class BinarySearchTree:
+    # builtin overridable functions
     def __init__(self, key):
         """Init a new BST"""
         self.__head = Node(key)
+        return
+
+    def __str__(self):
+        """Print an inorder traversal of BST"""
+        return str(self.inorder())
+
+    def __repr__(self):
+        return "BinarySearchTree"
 
     def insert(self, key):
         """Insert a key in a BST"""
@@ -40,6 +49,55 @@ class BinarySearchTree:
         """Remove a key in a BST"""
         return
 
+    # traversals
+    def inorder(self):
+        """Returns string containing InOrder traversal of Tree"""
+        return self.__inorder([],self.__head)
+
+    def __inorder(self,el, n):
+        el = []
+        if n is not None:
+            el = el + self.__inorder([],n.get_left_child())
+            el = el + [n.get_key()]
+            el = el + self.__inorder([],n.get_right_child())
+        return el
+
+    def preorder(self, n=-1):
+        """Returns string containing PreOrder traversal of Tree"""
+        return __preorder([],self.__head)
+
+    def __preorder(self,el, n):
+        el = []
+        if n is not None:
+            el = el + [n.get_key()]
+            el = el + self.__inorder([],n.get_left_child())
+            el = el + self.__inorder([],n.get_right_child())
+        return el
+
+
+    def postorder(self, n=-1):
+        """Returns string containing PostOrder traversal of Tree"""
+        return __postorder([],self.__head)
+
+    def __postorder(self,el, n):
+        el = []
+        if n is not None:
+            el = el + self.__inorder([],n.get_left_child())
+            el = el + self.__inorder([],n.get_right_child())
+            el = el + [n.get_key()]
+        return el
+
+    # predecessor & successor
+    def predecessor(self, n):
+        """Return BST node's predecessor"""
+        return
+
+    def successor(self, n):
+        """Returns BST node's successor"""
+        return
+
+    # minimum & maximum
+    
     # getters
     def get_head(self):
         return self.__head
