@@ -19,6 +19,7 @@ class BinarySearchTree:
     def __repr__(self):
         return "BinarySearchTree"
 
+    # elementary operations
     def insert(self, key):
         """Insert a key in a BST"""
         if self.__head is None:
@@ -44,12 +45,56 @@ class BinarySearchTree:
         elif key < p.get_key():
             p.set_left_child(n)
 
-      
-    def remove(self, key):
-        """Remove a key in a BST"""
         return
 
-    # traversals
+    def get(self, key):
+        """Returns a BST node of a given key, otherwise it returns None"""
+        n = self.__head
+
+        while n is not None:
+            if key == n.get_key():
+                return n
+            elif key < n.get_key():
+                n = n.get_left_child()
+            elif key > n.get_key():
+                n = n.get_right_child()
+        return None
+
+    def remove_key(self, key):
+        """Removes a key in a BST"""
+        return self.remove(self.get(key))
+    
+    def remove(self, z):
+        """Removes a node in a BST"""
+        if z.get_left_child() is None:
+            self.transplant(z,z.get_right_child())
+        elif z.get_right_child() is None:
+            self.transplant(z,z.get_left_child())
+        else:
+            y = self.minimum(z.get_right_child())
+            if y != z.get_right_child():
+                self.transplant(y,y.get_right_child())
+                y.set_right_child(z.get_right_child())
+                y.get_right_child().set_parent(y)
+
+            self.transplant(z,y)
+            y.set_left_child(z.get_left_child())
+            y.get_left_child().set_parent(y)
+        return
+
+    def transplant(self,u,v):
+        if u.get_parent() is None:
+            self.__head = v
+        elif u == u.get_parent().get_left_child():
+            u.get_parent().set_left_child(v)
+        else:
+            u.get_parent().set_right_child(v)
+
+        if v is not None:
+            v.set_parent(u.get_parent())
+        return
+    
+    # traversals (and private helper functions)
     def inorder(self):
         """Returns string containing InOrder traversal of Tree"""
         return self.__inorder([],self.__head)
@@ -64,7 +109,7 @@ class BinarySearchTree:
 
     def preorder(self, n=-1):
         """Returns string containing PreOrder traversal of Tree"""
-        return __preorder([],self.__head)
+        return self.__preorder([],self.__head)
 
     def __preorder(self,el, n):
         el = []
@@ -77,7 +122,7 @@ class BinarySearchTree:
 
     def postorder(self, n=-1):
         """Returns string containing PostOrder traversal of Tree"""
-        return __postorder([],self.__head)
+        return self.__postorder([],self.__head)
 
     def __postorder(self,el, n):
         el = []
@@ -90,13 +135,39 @@ class BinarySearchTree:
     # predecessor & successor
     def predecessor(self, n):
         """Return BST node's predecessor"""
-        return
+        if n.get_left_child() is not None:
+            return self.maximum(n.get_left_child())
+        m = n.get_parent()
+
+        while m is not None and n == m.get_left_child():
+            n = m
+            m = m.parent
+        return m
 
     def successor(self, n):
         """Returns BST node's successor"""
+        if n.get_right_child() is not None:
+            return self.minimum(n.get_right_child())
+
+        m = n.get_parent()
+        while m is not None and n == m.get_right_child():
+            n = m
+            m = n.parent
         return
 
     # minimum & maximum
+    def minimum(self, n):
+        """Returns minimum"""
+        while n.get_left_child() is not None:
+            n = n.get_left_child()
+        return n
+
+    def maximum(self, n):
+        """Return maximum"""
+        while n.get_right_child() is not None:
+            n = n.get_right_child()
+        return n
+
     
     # getters
     def get_head(self):
