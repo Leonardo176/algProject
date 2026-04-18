@@ -98,38 +98,55 @@ class BinarySearchTree:
     # traversals (and private helper functions)
     def inorder(self):
         """Returns string containing InOrder traversal of Tree"""
-        return self.__inorder([], self.__head)
+        return self.__inorder(self.__head)
 
-    def __inorder(self, el, n):
+    
+    def __inorder(self, n):
         el = []
-        if n is not None:
-            el = el + self.__inorder([], n.get_left_child())
-            el.append(n.get_key())
-            el = el + self.__inorder([], n.get_right_child())
-        return el
+        stack = []
+        current = n
 
-    def preorder(self, n=-1):
+        while current is not None or stack:
+            while current is not None:
+                stack.append(current)
+                current = current.get_left_child()
+
+            current = stack.pop()
+            el.append(current.get_key())
+            current = current.get_right_child()
+
+        return el
+    
+    def preorder(self):
         """Returns string containing PreOrder traversal of Tree"""
-        return self.__preorder([], self.__head)
+        return self.__preorder(self.__head)
 
-    def __preorder(self, el, n):
+    def __preorder(self, n):
         el = []
-        if n is not None:
-            el.append(n.get_key())
-            el = el + self.__preorder([], n.get_left_child())
-            el = el + self.__preorder([], n.get_right_child())
+        stack = [n]
+
+        while stack:
+            current = stack.pop()
+            el.append(current.get_key())
+            
+            if current.get_right_child() is not None:
+                stack.append(current.get_right_child())
+            if current.get_left_child() is not None:
+                stack.append(current.get_left_child())
+        
         return el
 
-    def postorder(self, n=-1):
-        """Returns string containing PostOrder traversal of Tree"""
-        return self.__postorder([], self.__head)
 
-    def __postorder(self, el, n):
+    def postorder(self):
+        """Returns string containing PostOrder traversal of Tree"""
+        return self.__postorder(self.__head)
+
+    def __postorder(self, n):
         el = []
-        if n is not None:
-            el = el + self.__postorder([], n.get_left_child())
-            el = el + self.__postorder([], n.get_right_child())
-            el.append(n.get_key())
+        stack = []
+
+        # TODO soon
+        
         return el
 
     # predecessor & successor
