@@ -143,10 +143,21 @@ class BinarySearchTree:
 
     def __postorder(self, n):
         el = []
-        stack = []
+        stack1 = [n]
+        stack2 = []
+        while stack1:
+            current = stack1.pop()
+            stack2.append(current)
 
-        # TODO soon
-        
+            if current.get_left_child() is not None:
+                stack1.append(current.get_left_child())
+            if current.get_right_child() is not None:
+                stack1.append(current.get_right_child())
+
+        # now stack2 should contain the reverse of the postorder traversal
+        while stack2:
+            el.append(stack2.pop().get_key())
+            
         return el
 
     # predecessor & successor
