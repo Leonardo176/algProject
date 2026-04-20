@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from tests.test_bst import test_insert, test_insert_and_remove
+from tests.bst import test_insert, test_insert_and_remove
 
 
 def main():

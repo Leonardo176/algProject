@@ -6,7 +6,7 @@ if __name__ == "__main__":
     exit(-1)
 
 
-from src.BST.BST import BST
+from trees.bst import BST
 
 
 def test_insert():
