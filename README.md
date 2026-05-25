@@ -2,7 +2,7 @@
 
 ## Project Goal
 
-The goal of this project is to implement the following data structures in the Python:
+The goal of this project is to implement the following data structures in Python:
 
 - *Binary Search Tree* (BST)
 - *Adelson-Velsky and Landis Tree* (AVL)
