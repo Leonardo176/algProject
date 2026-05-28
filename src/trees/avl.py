@@ -36,24 +36,24 @@ class AVL(BST):
     def __init__(self, root: AVLNode | None = None):
         super().__init__(root)
 
-    def rotate_right(self, x: Node | None):
-        if x is None:
+    def rotate_right(self, target: Node | None):
+        if target is None:
             return
-        y = x.left
+        y = target.left
 
-        self.rotate_right(x)
+        self.rotate_right(target)
 
-        invalidate_height(x)
+        invalidate_height(target)
         invalidate_height(y)
 
-    def rotate_left(self, x: Node | None):
-        if x is None:
+    def rotate_left(self, target: Node | None):
+        if target is None:
             return
-        y = x.right
+        y = target.right
 
-        self.rotate_left(x)
+        self.rotate_left(target)
 
-        invalidate_height(x)
+        invalidate_height(target)
         invalidate_height(y)
 
     def insert(self, n: Node):

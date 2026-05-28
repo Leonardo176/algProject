@@ -37,7 +37,7 @@ class BST:
         p = curr
         while curr is not None:
             p = curr
-            if key > curr.key:
+            if curr.key < key:
                 curr = curr.right
             elif key < curr.key:
                 curr = curr.left
@@ -46,7 +46,7 @@ class BST:
                 return
 
         n.parent = p
-        if key > p.key:
+        if p.key < key:
             p.right = n
         elif key < p.key:
             p.left = n
@@ -84,7 +84,7 @@ class BST:
         elif z.right is None:
             self.__transplant(z, z.left)
         else:
-            y = self.minimum(z.right)
+            y = self.min(z.right)
             if y != z.right:
                 self.__transplant(y, y.right)
                 y.right = z.right
@@ -180,10 +180,13 @@ class BST:
         return el
 
     # predecessor & successor
-    def prv(self, n: Node) -> Node | None:
+    def prv(self, n: Node | None) -> Node | None:
+        if n is None:
+            return
+
         # Return BST node's predecessor
         if n.left is not None:
-            return self.maximum(n.left)
+            return self.max(n.left)
 
         m = n.parent
         while m is not None and n == m.left:
@@ -191,10 +194,13 @@ class BST:
             m = n.parent
         return m
 
-    def nxt(self, n: Node) -> Node | None:
+    def nxt(self, n: Node | None) -> Node | None:
+        if n is None:
+            return
+
         # Returns BST node's successor
         if n.right is not None:
-            return self.minimum(n.right)
+            return self.min(n.right)
 
         m = n.parent
         while m is not None and n == m.right:
@@ -202,68 +208,69 @@ class BST:
             m = n.parent
         return m
 
-    # minimum & maximum
-    def minimum(self, n: Node) -> Node:
-        # Returns minimum
+    def min(self, n: Node) -> Node:
         while n.left is not None:
             n = n.left
         return n
 
-    def maximum(self, n: Node) -> Node:
-        # Return maximum
+    def max(self, n: Node) -> Node:
         while n.right is not None:
             n = n.right
         return n
 
-    def rotate_left(self, x: Node | None):
-        if x is None or x.right is None:
+    def rotate_left(self, target: Node | None):
+        if target is None or target.right is None:
             return
 
-        p = x.parent
-        y = x.right
+        # bubble: node that needs to be parent's child
+        # bubble_branch: node that needs to be target's child
+        parent = target.parent
+        bubble = target.right
+        bubble_branch = bubble.left
 
-        if p is None:
-            self.root = y
-            y.parent = None
+        # special case: target is root
+        if parent is None:
+            self.root = bubble
         else:
-            if x == p.left:
-                p.left = y
+            # make bubble parent's child
+            if target == parent.left:
+                parent.left = bubble
             else:
-                p.right = y
-            y.parent = p
+                parent.right = bubble
+        bubble.parent = parent
 
-        z = y.left
-        x.right = z
-        if z is not None:
-            z.parent = x
+        # make target bubble's child
+        bubble.left = target
+        target.parent = bubble
 
-        y.left = x
-        x.parent = y
+        # make bubble_branch target's child
+        target.right = bubble_branch
+        if bubble_branch is not None:
+            bubble_branch.parent = target
 
-    def rotate_right(self, x: Node | None):
-        if x is None or x.left is None:
+    def rotate_right(self, target: Node | None):
+        if target is None or target.left is None:
             return
 
-        p = x.parent
-        y = x.left
+        parent = target.parent
+        bubble = target.left
+        bubble_branch = bubble.right
 
-        if p is None:  # Cioè p era il root/radice
-            self.root = y  # Dopo la rotazione y diventa la radice
-            y.parent = None
+        if parent is None:
+            self.root = bubble
         else:
-            if x == p.left:  # Metto y al figlio giusto del padre p
-                p.left = y
+            if target == parent.left:
+                parent.left = bubble
             else:
-                p.right = y
-            y.parent = p  # Aggiorno genitore nodo y
+                parent.right = bubble
+        bubble.parent = parent
 
-        z = y.right
-        x.left = z  # Il sottoalbero viene assegnato come figlio di x
-        if z is not None:
-            z.parent = x  # Il nuovo genitore del sottoalbero diventa x
+        bubble.right = target
+        target.parent = bubble
 
-        y.right = x  # x viene spostato come figlio destro di y
-        x.parent = y  # x (spostato) ha un nuovo genitore
+        target.left = bubble_branch
+        if bubble_branch is not None:
+            bubble_branch.parent = target
 
 
 class Node:
