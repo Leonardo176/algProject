@@ -74,39 +74,40 @@ class BST:
         # Removes a key in a BST
         return self.remove(self.find(key))
 
-    def remove(self, z: Node | None):
-        if z is None:
+    def remove(self, target: Node | None):
+        if target is None:
             return
 
         # Removes a node in a BST
-        if z.left is None:
-            self.__transplant(z, z.right)
-        elif z.right is None:
-            self.__transplant(z, z.left)
+        if target.left is None:
+            self.__transplant(target, target.right)
+        elif target.right is None:
+            self.__transplant(target, target.left)
         else:
-            y = self.min(z.right)
-            if y != z.right:
-                self.__transplant(y, y.right)
-                y.right = z.right
-                y.right.parent = y
+            next = self.min(target.right)
+            if next != target.right:
+                self.__transplant(next, next.right)
+                next.right = target.right
+                next.right.parent = next
 
-            self.__transplant(z, y)
-            y.left = z.left
-            y.left.parent = y
+            self.__transplant(target, next)
+            next.left = target.left
+            next.left.parent = next
         return
 
-    # This function substitutes the node u with v.
-    def __transplant(self, u: Node, v: Node | None):
-        parent = u.parent
+    # This function replaces target with node
+    # node must be a target's child
+    def __transplant(self, target: Node, node: Node | None):
+        parent = target.parent
         if parent is None:
-            self.root = v
-        elif u == parent.left:
-            parent.left = v
+            self.root = node
+        elif target == parent.left:
+            parent.left = node
         else:
-            parent.right = v
+            parent.right = node
 
-        if v is not None:
-            v.parent = parent
+        if node is not None:
+            node.parent = parent
         return
 
     # traversals (and private helper functions)
@@ -224,20 +225,10 @@ class BST:
 
         # bubble: node that needs to be parent's child
         # bubble_branch: node that needs to be target's child
-        parent = target.parent
         bubble = target.right
         bubble_branch = bubble.left
 
-        # special case: target is root
-        if parent is None:
-            self.root = bubble
-        else:
-            # make bubble parent's child
-            if target == parent.left:
-                parent.left = bubble
-            else:
-                parent.right = bubble
-        bubble.parent = parent
+        self.__transplant(target, bubble)
 
         # make target bubble's child
         bubble.left = target
@@ -252,18 +243,10 @@ class BST:
         if target is None or target.left is None:
             return
 
-        parent = target.parent
         bubble = target.left
         bubble_branch = bubble.right
 
-        if parent is None:
-            self.root = bubble
-        else:
-            if target == parent.left:
-                parent.left = bubble
-            else:
-                parent.right = bubble
-        bubble.parent = parent
+        self.__transplant(target, bubble)
 
         bubble.right = target
         target.parent = bubble

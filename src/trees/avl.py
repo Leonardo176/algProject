@@ -59,5 +59,5 @@ class AVL(BST):
     def insert(self, n: Node):
         pass
 
-    def remove(self, z: Node | None):
+    def remove(self, target: Node | None):
         pass
