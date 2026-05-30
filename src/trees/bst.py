@@ -90,24 +90,24 @@ class BST:
 
         # Removes a node in a BST
         if target.left is None:
-            self.__transplant(target, target.right)
+            self._transplant(target, target.right)
         elif target.right is None:
-            self.__transplant(target, target.left)
+            self._transplant(target, target.left)
         else:
             next = self.min(target.right)
             if next != target.right:
-                self.__transplant(next, next.right)
+                self._transplant(next, next.right)
                 next.right = target.right
                 next.right.parent = next
 
-            self.__transplant(target, next)
+            self._transplant(target, next)
             next.left = target.left
             next.left.parent = next
         return
 
     # This function replaces target with node
     # node must be a target's child
-    def __transplant(self, target: Node, node: Node | None):
+    def _transplant(self, target: Node, node: Node | None):
         parent = target.parent
         if parent is None:
             self.root = node
@@ -238,7 +238,7 @@ class BST:
         bubble = target.right
         bubble_branch = bubble.left
 
-        self.__transplant(target, bubble)
+        self._transplant(target, bubble)
 
         # make target bubble's child
         bubble.left = target
@@ -256,7 +256,7 @@ class BST:
         bubble = target.left
         bubble_branch = bubble.right
 
-        self.__transplant(target, bubble)
+        self._transplant(target, bubble)
 
         bubble.right = target
         target.parent = bubble

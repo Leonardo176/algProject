@@ -24,6 +24,15 @@ def direction(node: Node) -> Direction:
         return Direction.DX
 
 
+def db_dir(parent: Node, db: Node | None) -> Direction:
+    if db is not None:
+        return direction(db)
+    elif parent.left is None:
+        return Direction.SX
+    else:
+        return Direction.DX
+
+
 def sibling(node: Node) -> Node | None:
     parent = node.parent
     if parent is None:
@@ -35,8 +44,17 @@ def sibling(node: Node) -> Node | None:
         return parent.left
 
 
+def db_sibling(parent: Node, db: Node | None) -> Node:
+    if db_dir(parent, db) == Direction.SX:
+        assert parent.right is not None
+        return parent.right
+    else:
+        assert parent.left is not None
+        return parent.left
+
+
 class RBTNode(Node):
-    # color must "red" or "black"
+    # color must be "red" or "black"
     color: str
 
     def __init__(self, key, left=None, right=None):
@@ -137,5 +155,143 @@ class RBTree(BST):
                 self.rotate_left(parent)
                 self.rotate_right(grandparent)
 
-    def remove(self, target):
-        pass
+    def remove(self, target: Node | None):
+        if target is None:
+            return
+
+        if target.left is not None and target.right is not None:
+            nxt = self.nxt(target)
+            assert nxt is not None
+
+            key = target.key
+            target.key = nxt.key
+            nxt.key = key
+
+            target = nxt
+
+        parent, c = target.parent, color(target)
+        db = target.left if target.left is not None else target.right
+
+        self._transplant(target, db)
+
+        if parent is None or (c == "red" and db is None):
+            self._root_black()
+            return
+
+        # fix double black
+
+        sibling = db_sibling(parent, db)
+
+        if color(sibling) == "red":
+            self.red_sibling(parent, db)
+        elif color(sibling.left) == "black" and color(sibling.right) == "black":
+            self.unlucky(parent, db)
+        else:
+            self.almost_lucky_and_lucky(parent, db)
+
+    # }
+
+    # subcases for remove
+
+    def lucky(self, parent: Node, db: Node | None):  # {
+        sibling = db_sibling(parent, db)
+        if db_dir(parent, db) == Direction.SX:
+            n = sibling.right
+            assert n is not None
+            recolor(n)
+            set_color(sibling, color(parent))
+            set_color(parent, "black")
+            self.rotate_left(parent)
+        else:
+            n = sibling.left
+            assert n is not None
+            recolor(n)
+            set_color(sibling, color(parent))
+            set_color(parent, "black")
+            self.rotate_right(parent)
+
+    # }
+
+    def almost_lucky_and_lucky(self, parent: Node, db: Node | None):
+        sibling = db_sibling(parent, db)
+
+        if db_dir(parent, db) == Direction.SX:
+            if color(sibling.right) == "red":
+                self.lucky(parent, db)
+                return
+
+            n = sibling.left
+            assert n is not None
+
+            recolor(n)
+            recolor(sibling)
+
+            self.rotate_right(sibling)
+            self.lucky(parent, db)
+        else:
+            if color(sibling.left) == "red":
+                self.lucky(parent, db)
+                return
+
+            n = sibling.right
+            assert n is not None
+
+            recolor(n)
+            recolor(sibling)
+
+            self.rotate_left(sibling)
+            self.lucky(parent, db)
+
+    # }
+
+    def unlucky(self, parent: Node, db: Node | None):
+        sib = db_sibling(parent, db)
+
+        while (
+            color(sib) == "black"
+            and color(sib.left) == "black"
+            and color(sib.right) == "black"
+        ):
+            recolor(sib)
+
+            if color(parent) == "red":
+                recolor(parent)
+                return
+
+            grandparent = parent.parent
+
+            if grandparent is not None:
+                sib = sibling(parent)
+                assert sib is not None
+                db = parent
+                parent = grandparent
+            else:
+                return
+
+        if color(sib) == "red":
+            self.red_sibling(parent, db)
+        else:
+            self.almost_lucky_and_lucky(parent, db)
+
+    # }
+
+    def red_sibling(self, parent: Node, db: Node | None):
+        sib = db_sibling(parent, db)
+        recolor(sib)
+        recolor(parent)
+
+        if db_dir(parent, db) == Direction.SX:
+            self.rotate_left(parent)
+            sib = parent.right
+        else:
+            self.rotate_right(parent)
+            sib = parent.left
+
+        assert sib is not None
+
+        if color(sib.left) == "black" and color(sib.right) == "black":
+            self.unlucky(parent, db)
+        else:
+            self.almost_lucky_and_lucky(parent, db)
+
+    # }
