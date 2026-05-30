@@ -6,6 +6,13 @@ if __name__ == "__main__":
     exit(-1)
 
 
+def height_ric(node: Node | None) -> int:
+    if node is None:
+        return 0
+    else:
+        return 1 + max(height_ric(node.left), height_ric(node.right))
+
+
 class BST:
     root: Node | None
 
@@ -22,6 +29,9 @@ class BST:
                 + BST(self.root.left).__str__()
                 + BST(self.root.right).__str__()
             )
+
+    def height(self) -> int:
+        return height_ric(self.root)
 
     # elementary operations
 

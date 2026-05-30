@@ -12,8 +12,8 @@ from trees.bst import BST
 def test_insert():
     rng = Random()
     # the random interval to generate numbers to be inserted
-    rand_range = (0, 10000)
-    to_insert = 1000
+    rand_range = (0, 100000)
+    to_insert = 10000
     bst = BST()
     arr = []
 
@@ -25,6 +25,8 @@ def test_insert():
             bst.insert_key(n)
 
     arr.sort()
+
+    print(bst.height())
 
     # the tree is a bst if and only if its inorder visit is sorted
     assert arr == bst.inorder()
