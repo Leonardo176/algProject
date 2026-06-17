@@ -4,7 +4,25 @@ import sys
 if __name__ == "__main__":
     sys.stderr.write("[ERROR] This file is a module\n")
     exit(-1)
+    
+class Node:
+    key: int
+    left: "Node | None"
+    right: "Node | None"
+    parent: "Node | None"
 
+    def __init__(self, key: int, left: "Node | None" = None, right: "Node | None" = None):
+        self.key = key
+        self.left = left
+        self.right = right
+        self.parent = None
+        if left is not None:
+            left.parent = self
+        if right is not None:
+            right.parent = self
+
+    def __str__(self):
+        return str(self.key)
 
 def height_ric(node: Node | None) -> int:
     if node is None:
@@ -264,23 +282,3 @@ class BST:
         target.left = bubble_branch
         if bubble_branch is not None:
             bubble_branch.parent = target
-
-
-class Node:
-    key: int
-    left: Node | None
-    right: Node | None
-    parent: Node | None
-
-    def __init__(self, key: int, left: Node | None = None, right: Node | None = None):
-        self.key = key
-        self.left = left
-        self.right = right
-        self.parent = None
-        if left is not None:
-            left.parent = self
-        if right is not None:
-            right.parent = self
-
-    def __str__(self):
-        return str(self.key)

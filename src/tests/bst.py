@@ -9,7 +9,7 @@ if __name__ == "__main__":
 from trees.bst import BST
 
 
-def test_insert():
+def test_bst_insert():
     rng = Random()
     # the random interval to generate numbers to be inserted
     rand_range = (0, 100000)
@@ -32,7 +32,7 @@ def test_insert():
     assert arr == bst.inorder()
 
 
-def test_insert_and_remove():
+def test_bst_insert_and_remove():
     rng = Random()
     # the random interval to generate numbers to be inserted
     rand_range = (0, 10000)
@@ -57,7 +57,7 @@ def test_insert_and_remove():
     assert arr == bst.inorder()
 
 
-def test_rotate():
+def test_bst_rotate():
     rng = Random()
     rand_range = (1, 10000)
     n = 1000

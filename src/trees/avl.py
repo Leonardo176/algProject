@@ -1,18 +1,17 @@
 #!/bin/python3
 import sys
 
-from src.trees.bst import BST, Node
+from trees.bst import BST, Node
 
 if __name__ == "__main__":
     sys.stderr.write("[ERROR] This file is a module\n")
     exit(-1)
-
-
+    
 class AVLNode(Node):
     height: int | None
 
     def __init__(
-        self, key: int, left: AVLNode | None = None, right: AVLNode | None = None
+        self, key: int, left: "AVLNode | None" = None, right: "AVLNode | None" = None
     ):
         super().__init__(key, left, right)
         self.height = None

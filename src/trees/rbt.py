@@ -7,7 +7,7 @@ class Direction(Enum):
     SX = 1
     DX = 2
 
-    def inv(self) -> Direction:
+    def inv(self) -> "Direction":
         if self == Direction.SX:
             return Direction.DX
         else:
@@ -293,5 +293,3 @@ class RBTree(BST):
             self.unlucky(parent, db)
         else:
             self.almost_lucky_and_lucky(parent, db)
-
-    # }

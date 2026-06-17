@@ -8,7 +8,7 @@ if __name__ == "__main__":
     exit(-1)
 
 
-def test_insert_height():
+def test_rbt_insert_height():
     rng = Random()
     # the random interval to generate numbers to be inserted
     rand_range = (0, 100000)
