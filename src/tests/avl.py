@@ -9,12 +9,27 @@ if __name__ == "__main__":
 
 
 def test_avl_insert():
+    r = Random()
     x = AVL()
-    x.insert_key(5)
-    x.insert_key(6)
-    print(x)
-    x.remove_key(5)
+    rand_range = (0, 50)
+    to_insert = 10
+    to_remove = 5
+    
+    for _ in range(to_insert):
+        x.insert_key(r.randint(rand_range[0], rand_range[1]))
     print(x)
 
 def test_avl_insert_and_remove():
-    print("test_avl_2")
+    r = Random()
+    x = AVL()
+    rand_range = (0, 50)
+    to_insert = 10
+    to_remove = 5
+    
+    for _ in range(to_insert):
+        x.insert_key(r.randint(rand_range[0], rand_range[1]))
+    print(x)
+    
+    for _ in range(to_remove):
+        x.remove_key(r.randint(rand_range[0], rand_range[1]))
+    print(x)
