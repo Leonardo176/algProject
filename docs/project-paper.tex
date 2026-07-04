@@ -10,16 +10,25 @@
 	\maketitle
 	\section{Abstract}
 
+		The goal of the project was to implement and compare some of the data structures studied in the “Algorithms and Data Structures” course at the University of Udine, specifically standard and self-balancing binary search trees. The project focused in particular on the time complexity involved in inserting and deleting data within these structures.
+
 	\section{Introduction}
 
-	\section{Theorical Background}
+		Search trees are among the most widely used data structures, since they enable high performance in both searching, inserting and deleting data. Specifically, the trees used in our project are binary: each node has at most two children, which can be other nodes or pointers to NULL. The resulting tree is acyclic, and one of its most important characteristics is its height that is defined as the maximum number of nodes on the path from the root to any leaf.
+		\\[10pt]
+		Height is a fundamental property of a tree: keeping its value as small as possible helps ensure efficient operations thanks to more efficient search, insertion and deletion operations. Balanced binary trees are designed to keep this value as low as possible, on the order of the base-2 logarithm of the number of nodes. 
+
+	\section{Theorical Background and Implementation}
 		\subsection{Binary Search Tree (BST)}
 
 		\subsection{Adelson-Velsky Landis Tree (AVL)}
 
-		\subsection{Red Black Tree (RBT)}
+			AVL trees are a data structure that implements self balancing binary search trees. The search operation in the tree exactly mirrors the search in BST. Insertion initially uses the BST insertion method, with the difference that a self balancing operation is performed afterward.
+			\\[10pt]
+			Specifically, this operation aims to identify imbalances in the tree by comparing the heights of two child nodes. Specifically, the goal is to minimize the total height of the tree, so that search operations remain as close as possible to logarithmic complexity.
+			\\[10pt]
 
-	\section{Implementation}
+		\subsection{Red Black Tree (RBT)}
 
 	\section{Test Cases Setup}
 

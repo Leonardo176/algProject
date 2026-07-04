@@ -13,7 +13,6 @@ def test_avl_insert():
     x = AVL()
     rand_range = (0, 50)
     to_insert = 10
-    to_remove = 5
     
     for _ in range(to_insert):
         x.insert_key(r.randint(rand_range[0], rand_range[1]))
