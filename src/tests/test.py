@@ -83,4 +83,6 @@ def test_insertion(type_of_tree: TreeType):
     plt.title(f"{type_of_tree.value} tempo inserimento")
     plt.grid(True)
 
-    plt.show()
+    filename = f"src/tests/{type_of_tree.value}_plot.png"
+
+    plt.savefig(filename)
