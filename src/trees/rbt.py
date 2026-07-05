@@ -78,7 +78,7 @@ def set_color(node: Node | None, color: str):
         setattr(node, "color", color)
 
 
-class RBTree(BST):
+class RBT(BST):
     root: Node | None
 
     def __init__(self, root=None):

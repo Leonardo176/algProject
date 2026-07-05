@@ -5,37 +5,50 @@ from statistics import median
 import matplotlib.pyplot as plt
 
 from trees.avl import AVL
+from trees.bst import BST
+from trees.rbt import RBT
 
-if __name__ == "__main__":
-    stderr.write("[ERROR] This file is a module\n")
-    exit(-1)
+from enum import Enum
 
+class TreeType(Enum):
+    BST = "BST"
+    AVL = "AVL"
+    RBT = "RBT"
 
-def test_avl_insert():
-    r = Random()
-    x = AVL()
-    rand_range = (0, 50)
-    to_insert = 10
-    
-    start = time.perf_counter()
+def create_tree(type_of_tree: TreeType):
+    if type_of_tree == TreeType.BST:
+        return BST()
+    elif type_of_tree == TreeType.AVL: 
+        return AVL()
+    elif type_of_tree == TreeType.RBT:
+        return RBT()
+    else:
+        raise ValueError(f"Tipo sconosciuto:  {type_of_tree}")
 
-    for _ in range(to_insert):
-        x.insert_key(r.randint(rand_range[0], rand_range[1]))
-    print(x)
-
-    stop = time.perf_counter()
-
-    duration = stop - start
-
-    print(duration)
-
-def test_avl_insert_and_remove():
+def test_insertion(type_of_tree: TreeType):
     r = Random()
     duration = list()
     
-    for n in range(0,50000,500):
+    n_min = 1000
+    n_max = 10000000
+
+    lista_num_elementi = []
+
+    c = (n_max - n_min) ** (1/99)
+
+    for i in range(0,100):
+        n_i = round(n_min*(c**i))
+
+        #Non vado oltre il massimo consentito
+        if n_i>100000:
+            break
+
+        lista_num_elementi.append(n_i)
+
+    for n in lista_num_elementi:
         print(f"Ora faccio il caso n={n}")
-        x = AVL()
+        
+        x = create_tree(type_of_tree)
 
         #Creo lista
         valori = list(range(0,n+1))
@@ -64,10 +77,10 @@ def test_avl_insert_and_remove():
         duration.append(median(tempi))
     
     plt.figure(figsize=(8,5))
-    plt.plot(list(range(0,50000,500)), duration, marker='.')
+    plt.plot(lista_num_elementi, duration, marker='.')
     plt.xlabel("Nodi (n)")
     plt.ylabel("Tempo (s)")
-    plt.title("AVL tempo inserimento")
+    plt.title(f"{type_of_tree.value} tempo inserimento")
     plt.grid(True)
 
     plt.show()
