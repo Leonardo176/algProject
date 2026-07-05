@@ -1,3 +1,4 @@
+import math
 import time
 from concurrent.futures import ProcessPoolExecutor
 from enum import Enum
@@ -29,7 +30,7 @@ def create_tree(type_of_tree: TreeType):
 
 
 def calc_lista_val_n():
-    samples = 200
+    samples = 100
     n_min = 1000
     n_max = 1000000
 
@@ -49,74 +50,88 @@ def calc_lista_val_n():
     return lista_val_n
 
 
-def insertion_plot(*types_of_trees: TreeType):
+def insertion_plot(*trees_type: TreeType):
     executor = ProcessPoolExecutor(max_workers=3)
-    futures = []
+    durations = {}
+    futures = {}
     lista_val_n = calc_lista_val_n()
-    strNome = ""
-    strPath = "src/tests/"
-
-    dict = {"AVL": 0, "BST": 1, "RBT": 2}
+    graph_name = ""
+    path = "plots/"
 
     # Creo il plot condiviso
     plt.figure(figsize=(8, 5))
 
-    for t in types_of_trees:
+    # Avviamo i test in parallelo
+    for t in trees_type:
         print(f"\nAvvio test per {t.value}")
-        futures.append(executor.submit(_test_insertion, t, lista_val_n))
+        futures[t] = executor.submit(_test_insertion, t, lista_val_n)
 
-    durations = [f.result() for f in futures]
+    # Facciamo il join dei thread creati
+    for t in trees_type:
+        durations[t] = futures[t].result()
 
-    for t in types_of_trees:
-        plt.plot(lista_val_n, durations[dict[t.value]], marker=".", label=t.value)
+    for t in trees_type:
+        plt.plot(lista_val_n, durations[t], marker=".", label=t.value)
         plt.xlabel("Nodi (n)")
         plt.ylabel("Tempo (s)")
-        strNome += t.value + " "
-        strPath += t.value + "_"
+        graph_name += t.value + " "
+        path += t.value + "_"
 
     plt.legend()
-    plt.title(f"{strNome}tempo inserimento")
+    plt.title(f"{graph_name}tempo inserimento")
     plt.grid(True)
 
-    filename = f"{strPath}plot.png"
-    plt.savefig(filename)
+    plt.savefig(f"{path}{time.strftime('%H:%M:%S', time.localtime())}-plot.png")
 
 
-def _test_insertion(type_of_tree: TreeType, lista_val_n):
-    r = Random()
-    duration = list()
+def _test_insertion(tree_type: TreeType, lista_val_n):
+    rng = Random()
+    duration = []
 
     for n in lista_val_n:
-        print(f"{type_of_tree.value}: {n}")
+        print(f"{tree_type.value}: {n}")
 
-        x = create_tree(type_of_tree)
+        tree = create_tree(tree_type)
 
         # Creo lista
-        valori = list(range(0, n + 1))
-        r.shuffle(valori)
+        valori = list(range(0, n + 10 + round(math.sqrt(n))))
+        rng.shuffle(valori)
 
         # Metto n valori casuali nell'albero
         for i in range(0, n):
-            x.insert_key(valori[i])
+            tree.insert_key(valori[i])
 
         # Inizialmente inserirò ultimo indice (unico che manca ancora)
-        ind = n
-        tempi = list()
+        tempi = []
 
-        # Faccio mediana su un campione di 300 tempi, per ogni n
-        for _ in range(100):
-            # MISURAZIONE (fermo garbage collector temporaneamente)
+        # Faccio mediana su un campione di tempi
+        for _ in range(100 + round(2 * math.sqrt(n))):
+            # Genero i valori da inserire/rimuovere
+            ins = rng.randint(n, len(valori) - 1)
+            # includo n perchè inserisco e poi rimuovo, quindi quando rimuovo l'albero avra' dimensione n+1
+            rem = rng.randint(0, n)
+
+            # MISURAZIONE
             start = time.perf_counter()
-            x.insert_key(valori[ind])
+            tree.insert_key(valori[ins])
             stop = time.perf_counter()
 
-            # Aggiungo uno dei 500 tempi: poi farò la mediana di tutti quelli raccolti
+            swap(valori, n, ins)
+
+            # Aggiungo uno dei tempi: poi farò la mediana di tutti quelli raccolti
             tempi.append(stop - start)
 
-            ind = r.randint(0, n)
-            x.remove_key(valori[ind])
+            tree.remove_key(valori[rem])
+
+            swap(valori, rem, n)
 
         tempi.sort()
         duration.append(median(tempi))
 
     return duration
+
+
+def swap(arr, i, j):
+    value = arr[i]
+    arr[i] = arr[j]
+    arr[j] = value
