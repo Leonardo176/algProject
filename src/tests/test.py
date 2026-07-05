@@ -3,6 +3,7 @@ from sys import stderr
 import time
 from statistics import median
 import matplotlib.pyplot as plt
+import gc
 
 from trees.avl import AVL
 from trees.bst import BST
@@ -25,27 +26,55 @@ def create_tree(type_of_tree: TreeType):
     else:
         raise ValueError(f"Tipo sconosciuto:  {type_of_tree}")
 
-def test_insertion(type_of_tree: TreeType):
-    r = Random()
-    duration = list()
-    
+def calc_lista_val_n():
     n_min = 1000
-    n_max = 10000000
+    n_max = 1000000
 
-    lista_num_elementi = []
+    lista_val_n = []
 
-    c = (n_max - n_min) ** (1/99)
+    c = (n_max / n_min) ** (1/99)
 
     for i in range(0,100):
         n_i = round(n_min*(c**i))
 
         #Non vado oltre il massimo consentito
-        if n_i>100000:
+        if n_i>n_max:
             break
 
-        lista_num_elementi.append(n_i)
+        lista_val_n.append(n_i)
 
-    for n in lista_num_elementi:
+    return lista_val_n
+
+def insertion_plot(*types_of_trees: TreeType):
+    lista_val_n = calc_lista_val_n()
+    strNome = f""
+    strPath = "src/tests/"
+
+    #Creo il plot condiviso
+    plt.figure(figsize=(8,5))
+
+    for t in types_of_trees:
+        print(f"\nAvvio test per {t.value}")
+        duration = _test_insertion(t, lista_val_n)
+
+        plt.plot(lista_val_n, duration, marker='.', label=t.value)
+        plt.xlabel("Nodi (n)")
+        plt.ylabel("Tempo (s)")
+        strNome += t.value + " "
+        strPath += t.value + "_"
+
+    plt.legend()
+    plt.title(f"{strNome}tempo inserimento")
+    plt.grid(True)
+
+    filename = f"{strPath}plot.png"
+    plt.savefig(filename)
+
+def _test_insertion(type_of_tree: TreeType, lista_val_n):
+    r = Random()
+    duration = list()
+
+    for n in lista_val_n:
         print(f"Ora faccio il caso n={n}")
         
         x = create_tree(type_of_tree)
@@ -63,26 +92,19 @@ def test_insertion(type_of_tree: TreeType):
         tempi = list()
 
         #Faccio mediana su un campione di 300 tempi, per ogni n
-        for _ in range(300):
-            #MISURAZIONE
+        for _ in range(100):
+            #MISURAZIONE (fermo garbage collector temporaneamente)
+            gc.disable()
             start = time.perf_counter()
             x.insert_key(valori[ind])
             stop = time.perf_counter()
+            gc.enable()
 
-            #Aggiungo uno dei 300 tempi: poi farò la mediana di tutti quelli raccolti
+            #Aggiungo uno dei 500 tempi: poi farò la mediana di tutti quelli raccolti
             tempi.append(stop - start)
 
             ind = r.randint(0,n)
             x.remove_key(valori[ind])
         duration.append(median(tempi))
     
-    plt.figure(figsize=(8,5))
-    plt.plot(lista_num_elementi, duration, marker='.')
-    plt.xlabel("Nodi (n)")
-    plt.ylabel("Tempo (s)")
-    plt.title(f"{type_of_tree.value} tempo inserimento")
-    plt.grid(True)
-
-    filename = f"src/tests/{type_of_tree.value}_plot.png"
-
-    plt.savefig(filename)
+    return duration
