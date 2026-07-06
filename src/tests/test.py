@@ -1,3 +1,4 @@
+import csv
 import math
 import time
 from concurrent.futures import ProcessPoolExecutor
@@ -70,7 +71,14 @@ def insertion_plot(*trees_type: TreeType):
     for t in trees_type:
         durations[t] = futures[t].result()
 
+    # crea il csv
+    f = open(f"{path}{time.strftime('%H-%M-%S', time.localtime())}.csv", "w", newline="")
+    wr = csv.writer(f)
+    wr.writerow(["n"] + lista_val_n)
+    
     for t in trees_type:
+        wr.writerow([t.value] + durations[t])
+        
         plt.plot(lista_val_n, durations[t], marker=".", label=t.value)
         plt.xlabel("Nodi (n)")
         plt.ylabel("Tempo (s)")
@@ -81,8 +89,10 @@ def insertion_plot(*trees_type: TreeType):
     plt.title(f"{graph_name}tempo inserimento")
     plt.grid(True)
 
-    plt.savefig(f"{path}{time.strftime('%H:%M:%S', time.localtime())}-plot.png")
+    plt.savefig(f"{path}{time.strftime('%H-%M-%S', time.localtime())}-plot.png")
 
+    # chiudi csv
+    f.close()
 
 def _test_insertion(tree_type: TreeType, lista_val_n):
     rng = Random()
