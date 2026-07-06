@@ -13,20 +13,21 @@ class AVLNode(Node):
 
     def __init__(self, key: int, left: "AVLNode | None" = None, right: "AVLNode | None" = None):
         super().__init__(key, left, right)
-        self.height = None
+        self.height = 1 #Nuovo nodo altezza 1 da foglia
 
-def height(node : Node | None):
-    if node is None:
-        return 0
-    if getattr(node, "height", None) is None:
-        node.height = 1 + max(height(node.left), height(node.right))
-    return node.height
+def get_height(node : Node | None):
+    return node.height if node is not None else 0
 
-#Rende nulle tutte le altezze
-def invalidate_height(node : AVLNode | None):
-    while node is not None:
-        node.height = None
-        node = node.parent
+#Aggiorno la altezza basandomi su l'altezza dei figli
+def update_height(node: AVLNode | None):
+    if node is not None:
+        node.height = 1 + max(get_height(node.left), get_height(node.right))
+
+# Rende nulle tutte le altezze fino alla radice
+# def invalidate_height(node : AVLNode | None):
+#     while node is not None:
+#         node.height = None
+#         node = node.parent
 
 
 class AVL(BST):
@@ -40,8 +41,8 @@ class AVL(BST):
     def balance_factor(self, node: Node | None):
         if node is None:
             return 0
-        #height ritorna 0 se il nodo è nullo!
-        return height(node.left) - height(node.right)
+        #get_height ritorna 0 se il nodo è nullo
+        return get_height(node.left) - get_height(node.right)
 
     def rotate_right(self, target: Node | None):
         if target is None:
@@ -50,8 +51,9 @@ class AVL(BST):
 
         BST.rotate_right(self, target)
 
-        invalidate_height(target)
-        invalidate_height(y)
+        #Aggiorno nodi usati e cambiati di posizione
+        update_height(target)
+        update_height(y)
 
     def rotate_left(self, target: Node | None):
         if target is None:
@@ -60,8 +62,8 @@ class AVL(BST):
 
         BST.rotate_left(self, target)
 
-        invalidate_height(target)
-        invalidate_height(y)
+        update_height(target)
+        update_height(y)
 
     def insert_key(self, key: int):
         return self._insert(AVLNode(key))
@@ -94,7 +96,7 @@ class AVL(BST):
 
     def balance_avl(self, x ):
         while x is not None:
-            invalidate_height(x)
+            update_height(x)
             
             balance_factor = self.balance_factor(x)
             

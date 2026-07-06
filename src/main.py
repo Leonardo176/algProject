@@ -4,7 +4,7 @@ from tests.test import TreeType, insertion_plot
 
 
 def main():
-    insertion_plot(TreeType.AVL, TreeType.BST, TreeType.RBT)
+    insertion_plot(TreeType.AVL)
 
 
 if __name__ == "__main__":
