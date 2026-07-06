@@ -1,6 +1,11 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+\graphicspath{ {./plots/} }
+\geometry{ top=40mm, bottom=40mm, left=30mm, right=30mm} 
 
 \title{\textbf{Implementation and Analysis of BST, AVL and RBT Data Structures}}
 \author{Sebastiano Babich (172249) - Leonardo Mazzon (172587) \\- Damiano Netto (171948)}
@@ -8,6 +13,9 @@
 
 \begin{document}
 	\maketitle
+	\tableofcontents
+	\newpage
+
 	\section{Abstract}
 
 		The goal of the project was to implement and compare some of the data structures studied in the “Algorithms and Data Structures” course at the University of Udine, specifically standard and self-balancing binary search trees. The project focused in particular on the time complexity involved in inserting and deleting data within these structures.
@@ -30,8 +38,22 @@
 		\subsection{Red Black Tree (RBT)}
 
 	\section{Test Cases Setup}
+		For the test cases, we have divided the code into three separate files:
+
+		\begin{itemize}
+			\item \textit{setup\_test.py}: 
+			\item \textit{test\_insertion.py}: 
+			\item \textit{test\_rotations.py}: 
+		\end{itemize}
 
 	\section{Results and Discussion}
+
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.8\textwidth]{AVL_14-01-33-plot} 
+			\caption{Test eseguito}
+			\label{fig:mia_immagine}
+		\end{figure}
 
 	\section{Conclusion}
 
