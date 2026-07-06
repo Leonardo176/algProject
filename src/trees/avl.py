@@ -79,14 +79,17 @@ class AVL(BST):
             self._remove(target)
 
     def _remove(self, target: AVLNode):
-        start = target.parent #attenzione se target era radice (?)
+        start = target.parent
 
         if target.left is not None and target.right is not None:
             succ_node = self.nxt(target) #Mi salvo il successore che troverà BST da sostituire al nodo
+            
             start = succ_node.parent  #qui è da dove parte ribilanciamento
 
-        BST.remove(self, target)
+            if target == start:
+                start = target.parent
 
+        BST.remove(self, target)
         self.balance_avl(start)
 
     def balance_avl(self, x ):
