@@ -6,7 +6,7 @@ from tests.test_rotations import rotations_plot
 
 
 def main():
-    #insertion_plot(TreeType.AVL, TreeType.BST, TreeType.RBT)
+    insertion_plot(TreeType.AVL, TreeType.BST, TreeType.RBT)
     rotations_plot(TreeType.AVL, TreeType.RBT)
 
 

@@ -17,22 +17,24 @@ def insertion_plot(*trees_type: TreeType):
     futures = {}
     lista_val_n = calc_lista_val_n()
     graph_name = ""
-    path = "plots/"
+    path = "plots/insertions/"
 
     # Creo il plot condiviso
     plt.figure(figsize=(8, 5))
 
     # Avviamo i test in parallelo
     for t in trees_type:
-        print(f"\nAvvio test per {t.value}")
+        print(f"\nAvvio test inserimenti per {t.value}")
         futures[t] = executor.submit(_test_insertion, t, lista_val_n)
 
     # Facciamo il join dei thread creati
     for t in trees_type:
+        graph_name += t.value + " "
+        path += t.value + "_"
         durations[t] = futures[t].result()
 
     # crea il csv
-    f = open(f"{path}{time.strftime('%H-%M-%S', time.localtime())}.csv", "w", newline="")
+    f = open(f"{path}{time.strftime('%d-%m-%H-%M-%S', time.localtime())}.csv", "w", newline="")
     wr = csv.writer(f)
     wr.writerow(["n"] + lista_val_n)
     
@@ -42,14 +44,12 @@ def insertion_plot(*trees_type: TreeType):
         plt.plot(lista_val_n, durations[t], marker=".", label=t.value)
         plt.xlabel("Nodi (n)")
         plt.ylabel("Tempo (s)")
-        graph_name += t.value + " "
-        path += t.value + "_"
 
     plt.legend()
     plt.title(f"{graph_name}tempo inserimento")
     plt.grid(True)
 
-    plt.savefig(f"{path}{time.strftime('%H-%M-%S', time.localtime())}-plot.png")
+    plt.savefig(f"{path}{time.strftime('%d-%m-%H-%M-%S', time.localtime())}.png")
 
     # chiudi csv
     f.close()

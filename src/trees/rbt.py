@@ -80,11 +80,9 @@ def set_color(node: Node | None, color: str):
 
 class RBT(BST):
     root: Node | None
-    counter_rotations: int
 
     def __init__(self, root=None):
         super().__init__(root)
-        counter_rotations = 0
 
     def _root_black(self):
         set_color(self.root, "black")

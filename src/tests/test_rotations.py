@@ -22,32 +22,32 @@ def rotations_plot(*trees_type: TreeType):
 
     # Avviamo i test in parallelo
     for t in trees_type:
-        print(f"\nAvvio test per {t.value}")
+        print(f"\nAvvio test rotazioni per {t.value}")
         futures[t] = executor.submit(_test_rotations, t, lista_val_n)
 
     # Facciamo il join dei thread creati
     for t in trees_type:
+        graph_name += t.value + " "
+        path += t.value + "_"
         n_rotations[t] = futures[t].result()
-
-    # crea il csv
-    f = open(f"{path}{time.strftime('%H-%M-%S', time.localtime())}.csv", "w", newline="")
+    
+	# crea il csv
+    f = open(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}.csv", "w", newline="")
     wr = csv.writer(f)
     wr.writerow(["n"] + lista_val_n)
-    
+
     for t in trees_type:
         wr.writerow([t.value] + n_rotations[t])
         
         plt.plot(lista_val_n, n_rotations[t], marker=".", label=t.value)
         plt.xlabel("Nodi (n)")
         plt.ylabel("Numero di rotazioni (n)")
-        graph_name += t.value + " "
-        path += t.value + "_"
 
     plt.legend()
     plt.title(f"{graph_name}: numero di rotazioni effettuate\nper la costruzione (albero di n nodi) e inserimento/cancellazione di 100 nodi")
     plt.grid(True)
 
-    plt.savefig(f"{path}{time.strftime('%H-%M-%S', time.localtime())}-plot.png")
+    plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}.png")
 
     # chiudi csv
     f.close()

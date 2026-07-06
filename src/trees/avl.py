@@ -48,7 +48,6 @@ class AVL(BST):
         #Aggiorno nodi usati e cambiati di posizione
         update_height(target)
         update_height(y)
-        self.counter_rotations += 1
 
     def rotate_left(self, target: Node | None):
         if target is None:
@@ -59,7 +58,6 @@ class AVL(BST):
 
         update_height(target)
         update_height(y)
-        self.counter_rotations += 1
 
     def insert_key(self, key: int):
         return self._insert(AVLNode(key))
@@ -91,7 +89,6 @@ class AVL(BST):
         self.balance_avl(start)
 
     def balance_avl(self, x ):
-        counter_rotations = 0
         while x is not None:
             update_height(x)
             
@@ -100,15 +97,11 @@ class AVL(BST):
             if balance_factor > 1:
                 if self.balance_factor(x.left) < 0:
                     self.rotate_left(x.left)
-                    counter_rotations += 1
                 self.rotate_right(x)
-                counter_rotations += 1
             elif balance_factor < -1:
                 if self.balance_factor(x.right) > 0:
                     self.rotate_right(x.right)
-                    counter_rotations += 1
                 self.rotate_left(x)
-                counter_rotations += 1
                 
             #Mi sposto in su, fin tanto che x è la radice, poi mi fermerò (vedi while)
             x = x.parent
