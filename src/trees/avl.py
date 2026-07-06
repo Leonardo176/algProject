@@ -23,15 +23,9 @@ def update_height(node: AVLNode | None):
     if node is not None:
         node.height = 1 + max(get_height(node.left), get_height(node.right))
 
-# Rende nulle tutte le altezze fino alla radice
-# def invalidate_height(node : AVLNode | None):
-#     while node is not None:
-#         node.height = None
-#         node = node.parent
-
-
 class AVL(BST):
     root: AVLNode | None
+    #La proprietà counter_rotations la contiene già la classe padre BST
 
     def __init__(self, root: AVLNode | None = None):
         super().__init__(root)
@@ -54,6 +48,7 @@ class AVL(BST):
         #Aggiorno nodi usati e cambiati di posizione
         update_height(target)
         update_height(y)
+        self.counter_rotations += 1
 
     def rotate_left(self, target: Node | None):
         if target is None:
@@ -64,6 +59,7 @@ class AVL(BST):
 
         update_height(target)
         update_height(y)
+        self.counter_rotations += 1
 
     def insert_key(self, key: int):
         return self._insert(AVLNode(key))
@@ -95,6 +91,7 @@ class AVL(BST):
         self.balance_avl(start)
 
     def balance_avl(self, x ):
+        counter_rotations = 0
         while x is not None:
             update_height(x)
             
@@ -103,11 +100,15 @@ class AVL(BST):
             if balance_factor > 1:
                 if self.balance_factor(x.left) < 0:
                     self.rotate_left(x.left)
+                    counter_rotations += 1
                 self.rotate_right(x)
+                counter_rotations += 1
             elif balance_factor < -1:
                 if self.balance_factor(x.right) > 0:
                     self.rotate_right(x.right)
+                    counter_rotations += 1
                 self.rotate_left(x)
+                counter_rotations += 1
                 
             #Mi sposto in su, fin tanto che x è la radice, poi mi fermerò (vedi while)
             x = x.parent
