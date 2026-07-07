@@ -1,6 +1,5 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{amsmath}
@@ -124,8 +123,8 @@
 					\item \textbf{Height management}: the height of each node is updated after insertions, deletions and rotations through the \textit{update\_height} function, avoiding the need of recomputing heights recursively.
 					\item \textbf{Node insertion and deletion}: insertion and deletion operations are implemented by extending the BST algorithms and performing the required rebalancing after each update, checking the balance\_factor calculated. The operations which can occour can be rotations in left or right direction.
 					\item \textbf{Tree rotations}: rotations are used as balancing operations to restore the AVL property after insertions and deletions. These operations are partially inherited from the BST class. Single and double rotations are selected according to the imbalance configuration detected by the balance factor.
-					
 				\end{itemize}
+
 			\item \textbf{RBT (Red-Black Trees)}
 				\begin{itemize}
 					\item \textbf{RBTNode implementation}: \textit{RBTNode} class has been creating to extend \textit{Node} class contained in BST. Each node in fact stores an additional \textit{color} field, which can be either red or black, fundamental to maintain the red-black tree properties.
@@ -134,6 +133,8 @@
 					\item \textbf{Tree rotations}: left and right rotations inherited from BST are reused during the balancing procedures to modify the tree structure while preserving the ordering property.
 				\end{itemize}
 		\end{itemize}
+	
+	\newpage
 
 	\section{Test Cases Setup}
 		The first issue to manage during the implementation of the test cases was the choice of the input sizes on which the experiments would be performed. We chose a wide range of tree sizes to make the simulation as realistic as possible, highlighting the performance differences among the different data structures.
@@ -160,7 +161,7 @@
 		\end{aligned}
 		\]
 
-
+	\newpage
 
 	\section{Results and Discussion}
 		The obtained results correctly reflected the theoretical concepts studied.
@@ -181,12 +182,28 @@
 
 		\subsection{Heights Tests}
 			
+	\newpage
 
-	\section{Conclusion}
+	\section{Conclusions}
 
 		To conclude this project, we compared all the data structures we analyzed and drew conclusions regarding the ideal use cases for each type of tree.
 
 		\subsection{Comparison of the Data Structures Analyzed}
+
+			The first important distinction we noticed was between simple binary search trees and auto-balanced trees:
+			
+			\begin{itemize}
+				\item \textbf{Non-Balanced Binary Trees}: 
+				\item \textbf{Balanced Binary Trees: }: 
+			\end{itemize}
+
+			The other distinction are the use cases for each data structure implemented. To drew these conclusion we analyzed the results obtained in the many tests.
+
+			\begin{itemize}
+				\item \textbf{BST}: The best use case for this type of tree are contexts where fast insertion is the primary requirement and results necessary to avoid the computational overhead of rebalancing. In a standard BST, inserting a new element is very straightforward because it only requires traversing the tree to find the correct position, without triggering any structural rotations. This results in an excellent time complexity, on the average case, of $O(\log n)$. However, the main drawback is that a standard BST does not guarantee balance. The worst scenario happens if the input data arrives mostly sorted: the tree degenerates into a mostly linear structure. In this case, both search and insertion performances drop significantly to $O(n)$. Therefore, we would choose a BST for applications where the data is known to be random, or contexts where the dataset can be small enough that the complexity of maintaining a balanced tree is not actually necessary.
+				\item \textbf{AVL}: for this data structure we observed a really good effort in mantaining height as low as possible of the tree, even if this comes to increasing insertion time complexity. The slower insertion time, which is caused by frequent rebalancing operations, pays off significantly when searches are performed. In fact, this tree guarantees that the maximum height will never exceed $1.44 \log_2(n)$ (where $n$ is the number of elements). The best-case scenario for using an AVL tree would be in systems where read operations are much more frequent than writes. In these cases we are accepting a slightly higher insertion time in exchange for really good search performance.
+				\item \textbf{}: this data structure emerged as an excellent compromise between the two trees discussed above. Red-Black trees excel for their insertion capabilities, thanks to a careful and strictly limited use of rotations during the balancing procedures. Although this means the tree might not achieve the absolute minimum height, the search performance remains highly competitive, with an upper bound of $2 \log_2(n+1)$ slightly higher than the one of AVL trees. We found many ideal use cases for this structure because it successfully combines the fast insertion speed of a standard BST with a search cost that is kept almost as low as an AVL. For this reason, we believe it could be a highly suitable structure to implement in file systems and, more generally, in any context where maintaining a strong balance between insertion and search speed is key.
+			\end{itemize}
 			
 		\subsection{Final Remarks}
 			The comparison demonstrates that the additional complexity required to implement self-balancing trees is justified by the significant long-term gains in efficiency and robustness offered by these data structures.
