@@ -42,6 +42,20 @@ def heights_plot(n_max: int, *trees_type: TreeType):
         plt.plot(lista_val_n, heights[t], marker=".", label=t.value)
         plt.xlabel("Nodi (n)")
         plt.ylabel("Altezza (n)")
+    
+    #Calcolo per funzione log2
+    log2_values = [math.log2(n) for n in lista_val_n]
+    plt.plot(lista_val_n, log2_values, label="Lim.inf alberi binari", color="black", linestyle=":", linewidth=2)
+    
+    #Inutile stampare, è troppo grande in scala
+    # if TreeType.BST in trees_type:        
+    #     plt.plot(lista_val_n, [x for x in lista_val_n], label="Lim.sup AVL", color="blue", linestyle=":", linewidth=2)
+
+    if TreeType.AVL in trees_type:        
+        plt.plot(lista_val_n, [x * 1.44 for x in log2_values], label="Lim.sup AVL", color="blue", linestyle=":", linewidth=2)
+
+    if TreeType.RBT in trees_type:        
+        plt.plot(lista_val_n, [x * 2 for x in log2_values], label="Lim.sup RBT", color="red", linestyle=":", linewidth=2) #In realtà doveva essere 2*log2(n+1), non con parametro n e basta
 
     plt.legend()
     plt.title(f"{graph_name}: altezza massima dell'albero")
