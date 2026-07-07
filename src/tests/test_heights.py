@@ -41,7 +41,7 @@ def heights_plot(*trees_type: TreeType):
         
         plt.plot(lista_val_n, heights[t], marker=".", label=t.value)
         plt.xlabel("Nodi (n)")
-        plt.ylabel("Numero di rotazioni (n)")
+        plt.ylabel("Altezza (n)")
 
     plt.legend()
     plt.title(f"{graph_name}: altezza massima dell'albero")
@@ -81,7 +81,7 @@ def _test_heights(tree_type: TreeType, lista_val_n):
 
             tree.insert_key(valori[ins])
 
-            conteggio_altezze.append(get_height(tree.root))
+            conteggio_altezze.append(height_ric(tree.root))
 
             swap(valori, n, ins)
 

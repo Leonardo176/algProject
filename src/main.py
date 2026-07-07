@@ -9,7 +9,7 @@ from tests.test_heights import heights_plot
 def main():
     #insertion_plot(TreeType.AVL, TreeType.BST, TreeType.RBT)
     #rotations_plot(TreeType.AVL, TreeType.RBT)
-    heights_plot(TreeType.AVL)
+    heights_plot(TreeType.AVL, TreeType.BST, TreeType.RBT)
 
 
 if __name__ == "__main__":

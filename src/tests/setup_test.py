@@ -1,5 +1,5 @@
-from trees.avl import AVL, get_height
-from trees.bst import BST
+from trees.avl import AVL
+from trees.bst import BST, height_ric
 from trees.rbt import RBT
 
 from enum import Enum
@@ -22,7 +22,7 @@ def create_tree(type_of_tree: TreeType):
 def calc_lista_val_n():
     samples = 100
     n_min = 1000
-    n_max = 1000000
+    n_max = 100000
 
     lista_val_n = []
 
