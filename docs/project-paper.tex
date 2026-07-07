@@ -5,17 +5,18 @@
 \usepackage{geometry}
 \usepackage{amsmath}
 \usepackage{array} %Per tabella
+\setlength{\parindent}{0pt} %rientro testo annullato
 % \usepackage{caption}
 % \captionsetup[table]{labelformat=empty} %per evitare scritta Table1,Table2, ecc
 
 % https://latexeditor.lagrida.com/ per simboli latex
 % simboli $\mathcal{O}(n)$, $\Theta(...)$, $\Omega(n)$
 
-\graphicspath{ {./plots/} }
+\graphicspath{ {./plots-images} }
 \geometry{ top=40mm, bottom=40mm, left=30mm, right=30mm} 
 
 \title{\textbf{Implementation and Analysis of BST, AVL and RBT Data Structures}}
-\author{Sebastiano Babich (172249) - Leonardo Mazzon (172587) \\- Damiano Netto (171948)}
+\author{Sebastiano Babich (172249) - Leonardo Mazzon (172587) \\Damiano Netto (171948)}
 \date{University of Udine, Academic Year 2025 - 2026}
 
 \begin{document}
@@ -29,33 +30,34 @@
 
 	\section{Introduction}
 
-		Search trees are among the most widely used data structures, since they enable high performance in both searching, inserting and deleting data. Specifically, the trees used in our project are binary: each node has at most two children, which can be other nodes or pointers to NULL.The resulting tree is acyclic, and one of its most important characteristics is its height that is defined as the maximum number of nodes on the path from the root to any leaf.
-		\\[10pt]
+		Search trees are among the most widely used data structures, since they enable high performance in both searching, inserting and deleting data. Specifically, the trees used in our project are binary: each node has at most two children, which can be other nodes or pointers to NULL. The resulting tree is acyclic, and one of its most important characteristics is its height that is defined as the maximum number of nodes on the path from the root to any leaf.
+
+		
 		
 
-	\section{Theorical Background}
-		In all of the data structures which implements search trees, height is a fundamental property: keeping its value as small as possible helps ensure efficient operations thanks to more efficient search, insertion and deletion operations.
+	\section{Theoretical Background}
+		In all data structures implementing search trees, height is a fundamental property: keeping its value as small as possible helps ensure efficient operations thanks to more efficient search, insertion and deletion operations.
 		\\[10pt]
 		Trees can be divided into two categories based on how they manage their height: \textbf{binary search trees} and \textbf{balanced binary trees}. Standard binary search trees do not actively control their height, while balanced binary trees use specific rules and rotation operations to keep the height as small as possible.
 		\\[10pt]
 		Trees belonging to the second category are designed to maintain a height close to the order of $\log_2(n)$, where $n$ is the number of nodes inserted into the tree.
 		\\[10pt]
-		In this project, we studied three types of trees, two of which implement self-balancing techniques.
+		In this project, we studied three types of trees, two of which implements self-balancing techniques.
 
 		\subsection{Binary Search Tree (BST)}
 
 			Binary search trees do not impose any restrictions on their height. Their main purpose is to provide efficient search, insertion and deletion operations maintaining an ordered structure of the stored elements. However, since they do not include any mechanism to control their height, the tree can become unbalanced depending on the order in which nodes are inserted. As the number of nodes increases, this can lead to a significant degradation in performance, especially in the worst-case scenario.
 
 
-			\begin{table}[h]
+			\begin{table}[ht]
 				\centering
 				\begin{tabular}{c|c|c}
 				\hline
 				\textbf{Operation} & \textbf{Average Case} & \textbf{Worst Case} \\
 					\hline
-						Search of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(n)$ \\
-						Insertion of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(n)$ \\
-						Deletion of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(n)$ \\
+						Search & $\mathcal{O}(\log n)$ & $\mathcal{O}(n)$ \\
+						Insert & $\mathcal{O}(\log n)$ & $\mathcal{O}(n)$ \\
+						Delete & $\mathcal{O}(\log n)$ & $\mathcal{O}(n)$ \\
 					\hline
 				\end{tabular}
 				\caption{Time complexity in BST operations}
@@ -65,20 +67,19 @@
 
 		\subsection{Adelson-Velsky Landis Tree (AVL)}
 
-			AVL trees are a data structure that implements self balancing binary search trees. The search operation in the tree exactly mirrors the search in BST. Insertion initially uses the BST insertion method, with the difference that a self balancing operation is performed afterward.
+			AVL trees are a data structure that implements self-balancing binary search trees. The search operation in the tree exactly mirrors the search in BST. Insertion initially uses the BST insertion method, with the difference that a self balancing operation is performed afterward.
 			\\[10pt]
 			Specifically, this operation aims to identify imbalances in the tree by comparing the heights of two child nodes. Specifically, the goal is to minimize the total height of the tree, so that search operations remain as close as possible to logarithmic complexity.
 			\\[10pt]
-			
-			\begin{table}[h]
+			\begin{table}[ht]
 				\centering
 				\begin{tabular}{c|c|c}
 				\hline
 				\textbf{Operation} & \textbf{Average Case} & \textbf{Worst Case} \\
 					\hline
-						Search of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
-						Insertion of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
-						Deletion of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Search& $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Insert & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Delete & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 					\hline
 				\end{tabular}
 				\caption{Time complexity in AVL operations}
@@ -87,15 +88,15 @@
 			...
 
 
-			\begin{table}[h]
+			\begin{table}[ht]
 				\centering
 				\begin{tabular}{c|c|c}
 				\hline
 				\textbf{Operation} & \textbf{Average Case} & \textbf{Worst Case} \\
 					\hline
-						Search of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
-						Insertion of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
-						Deletion of a Node & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Search& $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Insert & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Delete & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 					\hline
 				\end{tabular}
 				\caption{Time complexity in RBT operations}
@@ -105,35 +106,56 @@
 		The data structures (BST, AVL and RBT) were implemented as separate modules in the project, with similar interfaces for insertion, deletion, and search. Each tree maintains additional information useful for analysis, such as current height and number of rotations. Balancing operations were separated into dedicated functions within each type of tree to comply with the rules imposed by the data structure used.
 
 	\section{Test Cases Setup}
-		
-		Per l'impostazione dei casi di test abbiamo inizialmente pensato a quali potessero essere 
-		For the test cases, we have divided the code into three separate files:
+		The first issue to manage during the implementation of the test cases was the choice of the input sizes on which the experiments would be performed. We chose a wide range of tree sizes to make the simulation as realistic as possible, highlighting the performance differences among the different data structures.
+		\\[10pt]
+		A valid range of values for the number of nodes had to allow the analysis in multiple orders of magnitude. Instead of using a linear distribution of input sizes, which could have caused issues in tests on large numer of elements, a geometric progression was adopted in order to obtain a more uniform distribution on a logarithmic scale.
+		\\[10pt]
+		This approach allowed us to perform a better analysis of the growth trends of the different tree implementations.
+		\\[10pt]
+		These were the parameters selected:
+		\begin{align*}
+			n_{min} = 1000 && n_{max} = 10\, 000\, 000 && samples = 100
+		\end{align*}
 
-		\begin{itemize}
-			\item \textit{setup\_test.py}: 
-			\item \textit{test\_insertion.py}: 
-			\item \textit{test\_rotations.py}: 
-		\end{itemize}
+		The list of input sizes is generated through the \textit{calc\_lista\_val\_n} function, which computes the values of $n$ using a geometric progression. The common ratio of the progression is defined as:
+		\begin{align*}
+			n_i = \left\lfloor n_{min}\cdot c^i \right\rfloor && c = \left( \frac{n_{max}}{n_{min}} \right) ^ {(\frac{1}{samples - 1})}
+		\end{align*}
+
+		The geometric progression produces a total of 100 samples, gradually increasing from the minimum value of nodes up to the maximum value. The first and last values of the sequence are reported below:
+		\[
+		\begin{aligned}
+			&1000,\ 1097,\ 1205,\ 1322,\ 1451,\ \dots,
+			&7\,564\,633,\ 8\,302\,176,\ 9\,111\,628,\ 10\,000\,000
+		\end{aligned}
+		\]
 
 	\section{Results and Discussion}
-		\subsection{Test sugli inserimenti}
-			\begin{figure}[h]
+		The obtained results correctly reflected the theoretical concepts studied.
+
+		\subsection{Insertion Tests}
+			\begin{figure}[ht]
 				\centering
-				\includegraphics[width=0.8\textwidth]{AVL_14-01-33-plot} 
+				\includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot} 
 				\caption{Test eseguito}
 			\end{figure}
 
-		\subsection{Test sul numero di rotazioni}
-			
+		\subsection{Rotations Count Tests}
+			\begin{figure}[ht]
+				\centering
+				\includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot} 
+				\caption{Test eseguito}
+			\end{figure}
 
-		\subsection{Test sull'altezza dell'albero}
+		\subsection{Heights Tests}
+			
 
 	\section{Conclusion}
 
 		To conclude this project, we compared all the data structures we analyzed and drew conclusions regarding the ideal use cases for each type of tree.
 
-		\subsection{Confrontro tra le strutture dati analizzate}
+		\subsection{Comparison of the Data Structures Analyzed}
 			
 		\subsection{Final Remarks}
-			The comparison demonstrates that the additional complexity required to implementing self-balancing trees is justified by the significant long-term gains in efficiency and robustness offered by these data structures.
+			The comparison demonstrates that the additional complexity required to implement self-balancing trees is justified by the significant long-term gains in efficiency and robustness offered by these data structures.
 \end{document}

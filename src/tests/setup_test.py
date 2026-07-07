@@ -22,7 +22,7 @@ def create_tree(type_of_tree: TreeType):
 def calc_lista_val_n():
     samples = 100
     n_min = 1000
-    n_max = 100000
+    n_max = 10000000
 
     lista_val_n = []
 
