@@ -12,7 +12,7 @@
 % simboli $\mathcal{O}(n)$, $\Theta(...)$, $\Omega(n)$
 
 \graphicspath{ {./plots-images} }
-\geometry{ top=40mm, bottom=40mm, left=30mm, right=30mm} 
+\geometry{ top=40mm, bottom=40mm, left=30mm, right=30mm}
 
 \title{\textbf{Implementation and Analysis of BST, AVL and RBT Data Structures}}
 \author{Sebastiano Babich (172249) - Leonardo Mazzon (172587) \\Damiano Netto (171948)}
@@ -25,14 +25,17 @@
 
 	\section{Abstract}
 
-		The goal of the project was to implement and compare some of the data structures studied in the “Algorithms and Data Structures” course at the University of Udine, specifically standard and self-balancing binary search trees. The project focused in particular on the time complexity involved in  insertion and deletion operations within these structures. We also decided to analyze the heights reached by the trees during the various operations and to count the number of rotations performed on each tree.
+		The goal of the project is to implement and compare some of the data structures studied in the “Algorithms and Data Structures” course at the University of Udine,
+		specifically standard and self-balancing binary search trees. The project focused in particular on the time complexity involved in insertion and deletion operations
+		within these structures. We also decided to analyze the heights reached by the trees during the various operations and to count the number of rotations performed on each tree.
 
 	\section{Introduction}
 
-		Search trees are among the most widely used data structures, since they enable high performance in both searching, inserting and deleting data. Specifically, the trees used in our project are binary: each node has at most two children, which can either be other nodes or null references. The resulting tree is acyclic, and one of its most important characteristics is its height that is defined as the maximum number of edges on the path from the root to any leaf.
+		Search trees are among the most widely used data structures, since they enable high performance in both searching,
+		inserting and deleting data. Specifically, the trees used in our project are binary: each node has at most two children,
+		which can either be other nodes or null references. The resulting tree is acyclic, and one of its most important characteristics
+		is its height that is defined as the maximum number of edges on the path from the root to any leaf.
 
-		
-		
 
 	\section{Theoretical Background}
 		In all data structures implementing search trees, height is a fundamental property: keeping its value as small as possible helps ensure efficient operations thanks to more efficient search, insertion and deletion operations.
@@ -84,8 +87,22 @@
 				\caption{Time complexity in AVL operations}
 			\end{table}
 		\subsection{Red Black Tree (RBT)}
-			...
+		    An RBT is a self-balacing BST where every node is colored as red or black and satisfies certain conditions.
+			So for each node we also have to keep track to its color. If T is a RBT, for all $n$ node of T, we call $color(n)$ its color.
 
+				Let T be an BST where each node has a color associated ($color(n)$).
+
+			    T is a RBT $\iff$ T satisfies the following conditions:
+				\begin{itemize}
+				    \item Forall $n$ node in T, $color(n)$ must be either BLACK or RED (it must be a total function from the set of all nodes of T to \{BLACK, RED\})
+					\item NIL leaves are considered black.
+					\item For all red node $n$ in T, $n$ must not have a red child.
+					\item Every path from a $n$ node in T to its descendant NIL leaves must contain the same number of black nodes.
+				\end{itemize}
+
+			For readonly operations (like search, inorder visit, etc...) nothing changes compared to BST.
+			Instead functions for insertion and removal are adapted in a way that the keep the conditions listed above,
+			such that an RBT remains an RBT when inserting or removing elements.
 
 			\begin{table}[ht]
 				\centering
@@ -127,13 +144,13 @@
 
 			\item \textbf{RBT (Red-Black Trees)}
 				\begin{itemize}
-					\item \textbf{RBTNode implementation}: \textit{RBTNode} class has been creating to extend \textit{Node} class contained in BST. Each node in fact stores an additional \textit{color} field, which can be either red or black, fundamental to maintain the red-black tree properties.
+					\item \textbf{RBTNode implementation}: \textit{RBTNode} class has been created to extend \textit{Node} class contained in BST. Each node in fact stores an additional \textit{color} field, which can be either red or black, fundamental to maintain the red-black tree properties.
 					\item \textbf{Color management}: utility functions have been implemented to get, set and invert node colors. Missing children are considered black, simplifying the handling of boundary cases during insertion and deletion.
 					\item \textbf{Node insertion and deletion}: insertion and deletion are implemented by extending the standard BST functions. After each insertion or deletion, a rebalancing procedure is performed, involving recoloring operations and tree rotations. The required operations restore the red-black properties while preserving the BST ordering.
 					\item \textbf{Tree rotations}: left and right rotations inherited from BST are reused during the balancing procedures to modify the tree structure while preserving the ordering property.
 				\end{itemize}
 		\end{itemize}
-	
+
 	\newpage
 
 	\section{Test Cases Setup}
@@ -169,20 +186,20 @@
 		\subsection{Insertion Tests}
 			\begin{figure}[ht]
 				\centering
-				\includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot} 
-				\caption{Test eseguito}
+				\includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot}
+				\caption{AVL insertion test}
 			\end{figure}
 
 		\subsection{Rotations Count Tests}
 
 		% 	\begin{figure}[ht]
 		% 		\centering
-		% 		\includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot} 
+		% 		\includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot}
 		% 		\caption{Test executed on Linux}
 		% 	\end{figure}
 
 		\subsection{Heights Tests}
-			
+
 	\newpage
 
 	\section{Conclusions}
@@ -192,11 +209,11 @@
 		\subsection{Comparison of the Data Structures Analyzed}
 
 			The first important distinction we noticed was between simple binary search trees and self-balancing trees:
-			
+
 			%DA COMPLETARE
 			\begin{itemize}
-				\item \textbf{Non-Balanced Binary Trees}: 
-				\item \textbf{Balanced Binary Trees}: 
+				\item \textbf{Non-Balanced Binary Trees}:
+				\item \textbf{Balanced Binary Trees}:
 			\end{itemize}
 
 			The other distinctions are the use cases for each data structure implemented. To drew these conclusion we analyzed the results obtained in the many tests.
@@ -206,7 +223,7 @@
 				\item \textbf{AVL}: for this type of balanced tree we observed a really good effort in maintaining height as low as possible of the tree, even if this results in an increased insertion time complexity. The slower insertion time, which is caused by frequent rebalancing operations, pays off significantly when searches are performed. In fact, this tree guarantees that the maximum height will never exceed $1.44\log_2(n+2)$ (where $n$ is the number of elements). The best-case scenario for using an AVL tree would be in systems where read operations are much more frequent than writes. In these cases we are accepting a slightly higher insertion time in exchange for really good search performance.
 				\item \textbf{RBT}: this balanced data structure showed an excellent compromise between the two trees discussed above. Red-Black trees are particularly efficient during insertion operations, thanks to a careful and strictly limited use of rotations during the balancing procedures. Although this means the tree might not achieve the absolute minimum height, the search performance remains highly competitive, with an upper bound of $2 \log_2(n+1)$ (where $n$ is the number of elements) slightly higher than the one of AVL trees. We found many ideal use cases for this structure because it successfully combines the insertion speed of a standard BST with a search cost that is kept almost as low as an AVL. For this reason, we believe it could be a highly suitable structure to implement in systems requiring frequent searches and updates, and, more generally, in any context where maintaining a strong balance between insertion and search speed is key.
 			\end{itemize}
-			
+
 		\subsection{Final Remarks}
-			The comparison demonstrates that the additional complexity required to implement self-balancing trees is justified by the significant long-term gains in efficiency and robustness offered by these data structures. While a standard BST provides a simpler implementation and execution, it remains vulnerable to worst-case scenarios keeping it less reliable for large-scale datasets. Instead, choosing between an AVL and a RBT allows us to optimize the system based on whether the specific application requires fast searches or a balanced mix of frequent updates and lookups.
+			The comparison demonstrates that the additional complexity required to implement self-balancing trees is justified by the significant longterm gains in efficiency and robustness offered by these data structures. While a standard BST provides a simpler implementation and execution, it remains vulnerable to worst-case scenarios making it less reliable for large-scale datasets. Instead, choosing between an AVL and a RBT allows us to optimize the system based on whether the specific application requires fast searches or a balanced mix of frequent updates and lookups.
 \end{document}
