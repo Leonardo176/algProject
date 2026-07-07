@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from tests.setup_test import TreeType, calc_lista_val_n
+from tests.setup_test import TreeType
 from tests.test_insertions import insertion_plot
 from tests.test_rotations import rotations_plot
 from tests.test_heights import heights_plot
@@ -8,10 +8,10 @@ from tests.test_heights import heights_plot
 import argparse
 
 def main():
-    #insertion_plot(TreeType.AVL, TreeType.BST, TreeType.RBT)
-    #rotations_plot(TreeType.AVL, TreeType.RBT)
-    #heights_plot(TreeType.AVL, TreeType.BST, TreeType.RBT)
-    print(calc_lista_val_n())
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--plot", nargs="+", choices=["insertion", "rotations", "heights"], default=["insertion", "rotations", "heights"], help="What graph(s) to plot")
+    parser.add_argument("--trees", nargs="+", choices=["AVL", "BST", "RBT"], default=["AVL", "BST", "RBT"], help="What tree(s) to plot")
+    args = parser.parse_args()
 
     trees = [TreeType(t) for t in args.trees]
 
