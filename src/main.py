@@ -9,7 +9,7 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--plot", nargs="+", choices=["insertion", "rotations", "heights"], default=["insertion", "rotations", "heights"], help="What graph(s) to plot")
+    parser.add_argument("--plot", nargs="+", choices=["insertions", "rotations", "heights"], default=["insertions", "rotations", "heights"], help="What graph(s) to plot")
     
     parser.add_argument("--trees", nargs="+", choices=["AVL", "BST", "RBT"], default=["AVL", "BST", "RBT"], help="What tree(s) to plot")
     
@@ -22,7 +22,7 @@ def main():
 
     trees = [TreeType(t) for t in args.trees]
 
-    if "insertion" in args.plot:
+    if "insertions" in args.plot:
         insertion_plot(args.n, *trees)
     if "rotations" in args.plot:
         rotations_plot(args.n, *trees)

@@ -16,6 +16,7 @@ def heights_plot(n_max: int, *trees_type: TreeType):
     lista_val_n = calc_lista_val_n(n_max)
     graph_name = ""
     path = "plots/heights/"
+    end_of_path = ""
 
     # Creo il plot condiviso
     plt.figure(figsize=(8, 5))
@@ -25,14 +26,20 @@ def heights_plot(n_max: int, *trees_type: TreeType):
         print(f"\nAvvio test altezze per {t.value}")
         futures[t] = executor.submit(_test_heights, t, n_max, lista_val_n)
 
+    #Ordino per uniformare nome file
+
+    trees_type = sorted(trees_type, key=lambda tree: tree.value)
+
     # Facciamo il join dei thread creati
     for t in trees_type:
         graph_name += t.value + " "
-        path += t.value + "_"
+        end_of_path += t.value + "_"
         heights[t] = futures[t].result()
+
+    end_of_path = end_of_path.rstrip("_") #Tolgo _ finale
     
     # crea il csv
-    f = open(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}.csv", "w", newline="")
+    f = open(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.csv", "w", newline="")
     wr = csv.writer(f)
     wr.writerow(["n"] + lista_val_n)
 
@@ -61,7 +68,7 @@ def heights_plot(n_max: int, *trees_type: TreeType):
     plt.title(f"{graph_name}: altezza massima dell'albero")
     plt.grid(True)
 
-    plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}.png")
+    plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.png")
 
     # chiudi csv
     f.close()
