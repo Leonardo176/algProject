@@ -9,11 +9,11 @@ from tests.setup_test import TreeType, calc_lista_val_n, create_tree
 
 import matplotlib.pyplot as plt
 
-def rotations_plot(*trees_type: TreeType):
+def rotations_plot(n_max: int, *trees_type: TreeType):
     executor = ProcessPoolExecutor(max_workers=3)
     n_rotations = {}
     futures = {}
-    lista_val_n = calc_lista_val_n()
+    lista_val_n = calc_lista_val_n(n_max)
     graph_name = ""
     path = "plots/rotations/"
 
@@ -23,7 +23,7 @@ def rotations_plot(*trees_type: TreeType):
     # Avviamo i test in parallelo
     for t in trees_type:
         print(f"\nAvvio test rotazioni per {t.value}")
-        futures[t] = executor.submit(_test_rotations, t, lista_val_n)
+        futures[t] = executor.submit(_test_rotations, t, n_max, lista_val_n)
 
     # Facciamo il join dei thread creati
     for t in trees_type:
@@ -52,12 +52,12 @@ def rotations_plot(*trees_type: TreeType):
     # chiudi csv
     f.close()
 
-def _test_rotations(tree_type: TreeType, lista_val_n):
+def _test_rotations(tree_type: TreeType, n_max: int, lista_val_n):
     rng = Random()
     n_rotations = []
 
     for n in lista_val_n:
-        print(f"{tree_type.value}: {n}")
+        print(f"{tree_type.value}: {n} ({n/n_max*100:.2f}%)")
 
         tree = create_tree(tree_type)
         

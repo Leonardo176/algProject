@@ -9,11 +9,11 @@ from tests.setup_test import *
 
 import matplotlib.pyplot as plt
 
-def heights_plot(*trees_type: TreeType):
+def heights_plot(n_max: int, *trees_type: TreeType):
     executor = ProcessPoolExecutor(max_workers=3)
     heights = {}
     futures = {}
-    lista_val_n = calc_lista_val_n()
+    lista_val_n = calc_lista_val_n(n_max)
     graph_name = ""
     path = "plots/heights/"
 
@@ -23,7 +23,7 @@ def heights_plot(*trees_type: TreeType):
     # Avviamo i test in parallelo
     for t in trees_type:
         print(f"\nAvvio test altezze per {t.value}")
-        futures[t] = executor.submit(_test_heights, t, lista_val_n)
+        futures[t] = executor.submit(_test_heights, t, n_max, lista_val_n)
 
     # Facciamo il join dei thread creati
     for t in trees_type:
@@ -52,12 +52,12 @@ def heights_plot(*trees_type: TreeType):
     # chiudi csv
     f.close()
 
-def _test_heights(tree_type: TreeType, lista_val_n):
+def _test_heights(tree_type: TreeType, n_max: int, lista_val_n):
     rng = Random()
     list_heights = []
 
     for n in lista_val_n:
-        print(f"{tree_type.value}: {n}")
+        print(f"{tree_type.value}: {n} ({(n-1000)/(n_max-1000)*100:.2f}%)") #Stampa percentuale
 
         tree = create_tree(tree_type)
 
