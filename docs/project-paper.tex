@@ -26,11 +26,11 @@
 
 	\section{Abstract}
 
-		The goal of the project was to implement and compare some of the data structures studied in the “Algorithms and Data Structures” course at the University of Udine, specifically standard and self-balancing binary search trees. The project focused in particular on the time complexity involved in inserting and deleting data within these structures. We also decided to analyze the heights reached by the trees during the various operations and to count the number of rotations performed on each tree.
+		The goal of the project was to implement and compare some of the data structures studied in the “Algorithms and Data Structures” course at the University of Udine, specifically standard and self-balancing binary search trees. The project focused in particular on the time complexity involved in  insertion and deletion operations within these structures. We also decided to analyze the heights reached by the trees during the various operations and to count the number of rotations performed on each tree.
 
 	\section{Introduction}
 
-		Search trees are among the most widely used data structures, since they enable high performance in both searching, inserting and deleting data. Specifically, the trees used in our project are binary: each node has at most two children, which can be other nodes or pointers to NULL. The resulting tree is acyclic, and one of its most important characteristics is its height that is defined as the maximum number of nodes on the path from the root to any leaf.
+		Search trees are among the most widely used data structures, since they enable high performance in both searching, inserting and deleting data. Specifically, the trees used in our project are binary: each node has at most two children, which can either be other nodes or null references. The resulting tree is acyclic, and one of its most important characteristics is its height that is defined as the maximum number of edges on the path from the root to any leaf.
 
 		
 		
@@ -42,7 +42,7 @@
 		\\[10pt]
 		Trees belonging to the second category are designed to maintain a height close to the order of $\log_2(n)$, where $n$ is the number of nodes inserted into the tree.
 		\\[10pt]
-		In this project, we studied three types of trees, two of which implements self-balancing techniques.
+		In this project, we studied three types of trees, two of which implement self-balancing techniques.
 
 		\subsection{Binary Search Tree (BST)}
 
@@ -67,9 +67,9 @@
 
 		\subsection{Adelson-Velsky Landis Tree (AVL)}
 
-			AVL trees are a data structure that implements self-balancing binary search trees. The search operation in the tree exactly mirrors the search in BST. Insertion initially uses the BST insertion method, with the difference that a self balancing operation is performed afterward.
+			AVL trees are a data structure that implements self-balancing binary search trees. The search operation in the tree exactly mirrors the search in BST. Insertion initially uses the BST insertion method, with the difference that a self-balancing operation is performed afterward.
 			\\[10pt]
-			Specifically, this operation aims to identify imbalances in the tree by comparing the heights of two child nodes. Specifically, the goal is to minimize the total height of the tree, so that search operations remain as close as possible to logarithmic complexity.
+			Specifically, this operation aims to identify imbalances in the tree by comparing the heights of two child nodes. Specifically, the goal is to keep total height as low as possible, so that search operations remain as close as possible to logarithmic complexity.
 			\\[10pt]
 			\begin{table}[ht]
 				\centering
@@ -105,6 +105,36 @@
 	\section{Implementation}
 		The data structures (BST, AVL and RBT) were implemented as separate modules in the project, with similar interfaces for insertion, deletion, and search. Each tree maintains additional information useful for analysis, such as current height and number of rotations. Balancing operations were separated into dedicated functions within each type of tree to comply with the rules imposed by the data structure used.
 
+		These are the main functionalities implemented for each tree:
+
+		\begin{itemize}
+			\item \textbf{BST (Binary Search Trees)}
+				\begin{itemize}
+					\item \textbf{Node implementation}: a \textit{Node} class has been implemented to store the key, the references to the left and right children, and a reference to the parent node. Each one of these could be another node, or null reference.
+					\item \textbf{Node insertion and deletion}: insertion and deletion operations are implemented according the standard algorithms of Binary Search Trees, maintaining the BST ordering property.
+					\item \textbf{Search operations}: efficient search, minimum, maximum, predecessor and successor operations are provided by exploiting the ordering property of the Binary Search Tree.
+					\item \textbf{Tree traversals operations}: inorder, preorder and postorder are implemented iteratively to permit the visit of each tree created.
+					\item \textbf{Tree rotations}: left and right rotation operations are implemented as fundamental  tree transformations. These operations are reused by the balanced tree implementations and a rotation counter is kept to be used in the experimental analysis.
+				\end{itemize}
+
+			\item \textbf{AVL (Adelson-Velsky Landis Trees)}
+				\begin{itemize}
+					\item \textbf{AVLNode implementation}: an \textit{AVLNode} class, extending the \textit{Node} class contained in BST, has been created. Each node stores an additional \textit{height} field, which is required to compute the balance factor.
+					\item \textbf{Balance factor computation}: the balance factor of each node is calculated as the difference between the heights of its left and right subtrees. That value is used to detect unbalanced configurations.
+					\item \textbf{Height management}: the height of each node is updated after insertions, deletions and rotations through the \textit{update\_height} function, avoiding the need of recomputing heights recursively.
+					\item \textbf{Node insertion and deletion}: insertion and deletion operations are implemented by extending the BST algorithms and performing the required rebalancing after each update, checking the balance\_factor calculated. The operations which can occour can be rotations in left or right direction.
+					\item \textbf{Tree rotations}: rotations are used as balancing operations to restore the AVL property after insertions and deletions. These operations are partially inherited from the BST class. Single and double rotations are selected according to the imbalance configuration detected by the balance factor.
+					
+				\end{itemize}
+			\item \textbf{RBT (Red-Black Trees)}
+				\begin{itemize}
+					\item \textbf{RBTNode implementation}: \textit{RBTNode} class has been creating to extend \textit{Node} class contained in BST. Each node in fact stores an additional \textit{color} field, which can be either red or black, fundamental to maintain the red-black tree properties.
+					\item \textbf{Color management}: utility functions have been implemented to get, set and invert node colors. Missing children are considered black, simplifying the handling of boundary cases during insertion and deletion.
+					\item \textbf{Node insertion and deletion}: insertion and deletion are implemented by extending the standard BST functions. After each insertion or deletion, a rebalancing procedure is performed, involving recoloring operations and tree rotations. The required operations restore the red-black properties while preserving the BST ordering.
+					\item \textbf{Tree rotations}: left and right rotations inherited from BST are reused during the balancing procedures to modify the tree structure while preserving the ordering property.
+				\end{itemize}
+		\end{itemize}
+
 	\section{Test Cases Setup}
 		The first issue to manage during the implementation of the test cases was the choice of the input sizes on which the experiments would be performed. We chose a wide range of tree sizes to make the simulation as realistic as possible, highlighting the performance differences among the different data structures.
 		\\[10pt]
@@ -114,7 +144,7 @@
 		\\[10pt]
 		These were the parameters selected:
 		\begin{align*}
-			n_{min} = 1000 && n_{max} = 10\, 000\, 000 && samples = 100
+			n_{min} = 1000 && n_{max} = 1\, 000\, 000 && samples = 100
 		\end{align*}
 
 		The list of input sizes is generated through the \textit{calc\_lista\_val\_n} function, which computes the values of $n$ using a geometric progression. The common ratio of the progression is defined as:
@@ -125,10 +155,12 @@
 		The geometric progression produces a total of 100 samples, gradually increasing from the minimum value of nodes up to the maximum value. The first and last values of the sequence are reported below:
 		\[
 		\begin{aligned}
-			&1000,\ 1097,\ 1205,\ 1322,\ 1451,\ \dots,
-			&7\,564\,633,\ 8\,302\,176,\ 9\,111\,628,\ 10\,000\,000
+			&1000,\ 1072,\ 1150,\ 1233,\ 1322,\ \dots,
+			\ 811\,131,\ 869\,749,\ 932\,603, 1\,000\,000
 		\end{aligned}
 		\]
+
+
 
 	\section{Results and Discussion}
 		The obtained results correctly reflected the theoretical concepts studied.
