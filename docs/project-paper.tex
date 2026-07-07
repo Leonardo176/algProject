@@ -79,7 +79,7 @@
 				\hline
 				\textbf{Operation} & \textbf{Average Case} & \textbf{Worst Case} \\
 					\hline
-						Search& $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Search & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 						Insert & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 						Delete & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 					\hline
@@ -101,8 +101,8 @@
 				\end{itemize}
 
 			For readonly operations (like search, inorder visit, etc...) nothing changes compared to BST.
-			Instead functions for insertion and removal are adapted in a way that the keep the conditions listed above,
-			such that an RBT remains an RBT when inserting or removing elements.
+			Instead functions for insertion and removal are adapted in a way that they keep the conditions listed above,
+			so that an RBT remains an RBT when inserting or removing elements.
 
 			\begin{table}[ht]
 				\centering
@@ -110,7 +110,7 @@
 				\hline
 				\textbf{Operation} & \textbf{Average Case} & \textbf{Worst Case} \\
 					\hline
-						Search& $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
+						Search & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 						Insert & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 						Delete & $\mathcal{O}(\log n)$ & $\mathcal{O}(\log n)$ \\
 					\hline
@@ -154,6 +154,8 @@
 	\newpage
 
 	\section{Test Cases Setup}
+
+	    \subsection{Choosing appropriate input sizes}
 		The first issue to manage during the implementation of the test cases was the choice of the input sizes on which the experiments would be performed. We chose a wide range of tree sizes to make the simulation as realistic as possible, highlighting the performance differences among the different data structures.
 		\\[10pt]
 		A valid range of values for the number of nodes had to allow the analysis in multiple orders of magnitude. Instead of using a linear distribution of input sizes, which could have caused issues in tests on large numer of elements, a geometric progression was adopted in order to obtain a more uniform distribution on a logarithmic scale.
@@ -177,6 +179,30 @@
 			\ 811\,131,\ 869\,749,\ 932\,603, 1\,000\,000
 		\end{aligned}
 		\]
+
+		Then for each $n_i$, we need to choose how many test cases we want to make.
+
+		\subsection{Choosing number of test cases}
+
+		At the start we tried a constant number of test cases for each $n_i$.
+		But then we quickly realized that this didn't make much sense because if
+		the constant is too small, then for larger $n_i$ we wouldn't cover a good amount of cases,
+		but if the constant is too big, then for smaller $n_i$ we would make a lot of redundant test cases wasting time and resources.
+
+		So we changed it to be this function:
+
+		\begin{equation}
+		f(n) = min + k \sqrt n
+		\end{equation}
+
+		The reason why we choose $\sqrt n$ is that it does not grow so big like $n$ that it will make the testing very inefficient (think when $n$ is 1000000)
+		but it is still big enough to cover a lot of cases (on n = 1000000, 1000 cases at least if $k \geq 1$).
+		The $min$ is needed so that we do at least $min$ tests for small $n$, and we choose $k$ if we want to do more or less tests.
+
+		In the tests we choose $min = 100$ and $k = 2$ as it was a good compromise.
+
+		So the number of tests for each $n_i$ is $100 + 2\sqrt n_i$.
+
 
 	\newpage
 
