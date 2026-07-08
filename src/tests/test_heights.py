@@ -1,117 +1,136 @@
 import csv
 import math
 import time
+import matplotlib.pyplot as plt
+
 from concurrent.futures import ProcessPoolExecutor
 from random import Random
 from statistics import median
 
 from tests.setup_test import *
 
-import matplotlib.pyplot as plt
+
+# Generating plot in .png format and a .csv file in plots/heights directory
+# Recorded data represent the maximum height reached for each tree in trees_type for different numbers of nodes n. For each one 100 insertions and deletions are performed
 
 def heights_plot(n_max: int, *trees_type: TreeType):
+    # Enabling parallel execution using multiple processes
     executor = ProcessPoolExecutor(max_workers=3)
+
     heights = {}
     futures = {}
-    lista_val_n = calc_lista_val_n(n_max)
+
+    # Values of n (as number of nodes) used in the experiment
+    n_values = get_n_values(n_max)
+
     graph_name = ""
     path = "plots/heights/"
     end_of_path = ""
 
-    # Creo il plot condiviso
-    plt.figure(figsize=(8, 5))
+    # Created a single plot containing all selected tree types
+    plt.figure(figsize=(9, 5))
 
-    # Avviamo i test in parallelo
+    # Starting one process for each tree type
     for t in trees_type:
-        print(f"\nAvvio test altezze per {t.value}")
-        futures[t] = executor.submit(_test_heights, t, n_max, lista_val_n)
+        print(f"\nStarting Heights test for {t.value}...")
 
-    #Ordino per uniformare nome file
+        # Storing in futures matrix all the resulting heights computations, for each tree type
+        futures[t] = executor.submit(_test_heights, t, n_max, n_values)
 
+    # Sorting trees based on their names
     trees_type = sorted(trees_type, key=lambda tree: tree.value)
 
-    # Facciamo il join dei thread creati
+    # Waiting all tree's process to finish
     for t in trees_type:
-        graph_name += t.value + " "
+        graph_name += t.value + ", "
         end_of_path += t.value + "_"
         heights[t] = futures[t].result()
 
-    end_of_path = end_of_path.rstrip("_") #Tolgo _ finale
+    graph_name = end_of_path.rstrip(", ")
+    end_of_path = end_of_path.rstrip("_")
     
-    # crea il csv
+    # Exporting data in .csv file, formatting the filename with the current timestamp to avoid overwriting on previous results
     f = open(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.csv", "w", newline="")
     wr = csv.writer(f)
-    wr.writerow(["n"] + lista_val_n)
 
+    #Adding to .csv file the values of n on which the test of heights was computed
+    wr.writerow(["n"] + n_values)
+
+    # Writing the measured heights in the .csv and .png plot
     for t in trees_type:
+        # For .csv file
         wr.writerow([t.value] + heights[t])
-        
-        plt.plot(lista_val_n, heights[t], marker=".", label=t.value)
-        plt.xlabel("Nodi (n)")
-        plt.ylabel("Altezza (n)")
-    
-    #Calcolo per funzione log2
-    log2_values = [math.log2(n) for n in lista_val_n]
-    plt.plot(lista_val_n, log2_values, label="Lim.inf alberi binari", color="black", linestyle=":", linewidth=2)
-    
-    #Inutile stampare, è troppo grande in scala
-    # if TreeType.BST in trees_type:        
-    #     plt.plot(lista_val_n, [x for x in lista_val_n], label="Lim.sup AVL", color="blue", linestyle=":", linewidth=2)
 
+        # For plot file
+        plt.plot(n_values, heights[t], marker=".", label=t.value)
+        plt.xlabel("Nodes (number)")
+        plt.ylabel("Heights (number)")
+
+    # Closing .csv file
+    f.close()
+    
+    # Adding the height bounds for comparison with the experimental data
+    log2_values = [math.log2(n) for n in n_values]
+
+    # Lower bound for the height of any binary tree
+    plt.plot(n_values, log2_values, label="Binary tree lower bound", color="black", linestyle=":", linewidth=2)
+
+    # Upper bound for the height of AVL trees
     if TreeType.AVL in trees_type:        
-        plt.plot(lista_val_n, [x * 1.44 for x in log2_values], label="Lim.sup AVL", color="blue", linestyle=":", linewidth=2)
+        plt.plot(n_values, [x * 1.44 for x in log2_values], label="AVL upper bound", color="blue", linestyle=":", linewidth=2)
 
+    # Upper bound for the height of RBT trees
     if TreeType.RBT in trees_type:        
-        plt.plot(lista_val_n, [x * 2 for x in log2_values], label="Lim.sup RBT", color="red", linestyle=":", linewidth=2) #In realtà doveva essere 2*log2(n+1), non con parametro n e basta
+        plt.plot(n_values, [x * 2 for x in log2_values], label="RBT upper bound", color="red", linestyle=":", linewidth=2) #In realtà doveva essere 2*log2(n+1), non con parametro n e basta
 
     plt.legend()
-    plt.title(f"{graph_name}: altezza massima dell'albero")
+    plt.title(f"{graph_name}: maximum height reached on 100 insertions and deletions")
     plt.grid(True)
 
+    # Exporting plot file as .png
     plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.png")
 
-    # chiudi csv
-    f.close()
-
-def _test_heights(tree_type: TreeType, n_max: int, lista_val_n):
+def _test_heights(tree_type: TreeType, n_max: int, n_values):
     rng = Random()
     list_heights = []
 
-    for n in lista_val_n:
-        print(f"{tree_type.value}: {n} ({(n-1000)/(n_max-1000)*100:.2f}%)") #Stampa percentuale
+    for n in n_values:
+        # Displaying progress
+        print(f"{tree_type.value}: {n} ({(n-1000)/(n_max-1000)*100:.2f}%)")
 
+        # Creating the correct type of tree
         tree = create_tree(tree_type)
 
-        # Creo lista
-        valori = list(range(0, n + 10 + round(math.sqrt(n))))
-        rng.shuffle(valori)
+        # Creating values list containing numbers in the range below
+        values = list(range(0, n + 10 + round(math.sqrt(n))))
+        
+        # Shuffling list
+        rng.shuffle(values)
 
-        # Metto n valori casuali nell'albero
+        # Inserting first n values in the tree
         for i in range(0, n):
-            tree.insert_key(valori[i])
+            tree.insert_key(values[i])
 
-        # Inizialmente inserirò ultimo indice (unico che manca ancora)
-        conteggio_altezze = []
+        # Creating array to record the height reached by the tree after each insertion
+        heights_reached = []
 
-        # Faccio mediana su un campione di tempi
+        # I will perform 100 insertions and deletions in a row
         for _ in range(100):
-            # Genero i valori da inserire/rimuovere
-            ins = rng.randint(n, len(valori) - 1)
-            # includo n perchè inserisco e poi rimuovo, quindi quando rimuovo l'albero avra' dimensione n+1
+            # Generating index of the element to insert and to remove
+            ins = rng.randint(n, len(values) - 1)
             rem = rng.randint(0, n)
 
-            tree.insert_key(valori[ins])
+            tree.insert_key(values[ins])
 
-            conteggio_altezze.append(height_ric(tree.root))
+            # Saving in the array che height reached
+            heights_reached.append(height_ric(tree.root))
 
-            swap(valori, n, ins)
+            swap(values, n, ins)
+            tree.remove_key(values[rem])
+            swap(values, rem, n)
 
-            tree.remove_key(valori[rem])
-
-            swap(valori, rem, n)
-
-        conteggio_altezze.sort()
-        list_heights.append(max(conteggio_altezze))
+        # Adding to all the heights the maximum height reached in all 100 insertions
+        list_heights.append(max(heights_reached))
 
     return list_heights
 

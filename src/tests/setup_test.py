@@ -19,7 +19,7 @@ def create_tree(type_of_tree: TreeType):
     else:
         raise ValueError(f"Tipo sconosciuto:  {type_of_tree}")
     
-def calc_lista_val_n(n_max: int):
+def get_n_values(n_max: int):
     samples = 100
     n_min = 1000
 

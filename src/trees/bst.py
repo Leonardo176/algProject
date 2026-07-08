@@ -34,11 +34,11 @@ def height_ric(node: Node | None) -> int:
 
 class BST:
     root: Node | None
-    counter_rotations: int
+    rotations_counter: int
 
     def __init__(self, root=None):
         self.root = root
-        self.counter_rotations = 0
+        self.rotations_counter = 0
         return
 
     def __str__(self):
@@ -254,7 +254,7 @@ class BST:
         if target is None or target.right is None:
             return
 
-        self.counter_rotations += 1
+        self.rotations_counter += 1
 
         # bubble: node that needs to be parent's child
         # bubble_branch: node that needs to be target's child
@@ -276,7 +276,7 @@ class BST:
         if target is None or target.left is None:
             return
         
-        self.counter_rotations += 1
+        self.rotations_counter += 1
 
         bubble = target.left
         bubble_branch = bubble.right
