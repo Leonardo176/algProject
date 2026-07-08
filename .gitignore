@@ -21,3 +21,5 @@ wheels/
 *.lot
 *.bbl
 *.blg
+*.bcf
+*.run.xml
