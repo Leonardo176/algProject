@@ -3,6 +3,7 @@
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{amsmath}
+\usepackage{float} % For having images placed correctly between text
 \usepackage{array} %Per tabella
 \usepackage{hyperref} % automatic pdf indexing
 \usepackage[backend=biber]{biblatex} % for sitography
@@ -211,20 +212,47 @@ So the number of tests for each $n_i$ is $100 + 2\sqrt n_i$.
 \section{Results and Discussion}
 The obtained results correctly reflected the theoretical concepts studied.
 
-\subsection{Insertion Tests}
-\begin{figure}[ht]
+\subsection{Test Machine and OS}
+In our initial approach to benchmarking the insertion times of BST, AVL, and RBT, we ran our test suites on standard desktop operating systems like Windows and full-featured Linux distributions. Because our tests required precision at the microsecond scale, we quickly discovered that these environments introduced significant noise into our data. Standard operating systems manage hundreds of concurrent background processes, forcing the OS scheduler to frequently preempt our process. These relentless context switches, and suspension of our process, created unpredictable timing spikes that heavily obscured the true algorithmic performance of the trees.
+
+
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot}
+  \includegraphics[width=0.8\textwidth]{/insertions/spikes_everywhere.png}
+  \caption{Example of test executed in Linux desktop}
+\end{figure}
+
+To eliminate this systemic jitter, we shifted our testing environment to a lightweight, command-line-only Linux distro (we choose Arch Linux). By stripping away the graphical user interface and unnecessary background daemons, we drastically reduced the operating system's footprint. We also executed all testing processes with maximum priority, ensuring our tests received the highest possible CPU time. This strictly controlled environment successfully suppressed external interference and scheduler interruptions, yielding highly stable and reproducible execution times. As a result, all final measurements used in this comparative analysis were exclusively gathered under this optimized Arch Linux setup.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_13-06-48_AVL_BST_RBT.png}
+  \caption{Example of test executed in Archlinux with maximum priority}
+\end{figure}
+
+Then for the hardware, we used a laptop always in charging with the following components:
+
+\begin{itemize}
+\item CPU: Intel Core i5-1335U
+\item RAM: 16GB DDR4-3200 MHz SO-DIMM Dual Channel
+\item Disk: Samsung SSD 980 500 GB
+\end{itemize}
+
+\subsection{Insertion Tests}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_13-14-26_AVL.png}
   \caption{AVL insertion test}
 \end{figure}
 
 \subsection{Rotations Count Tests}
 
-% 	\begin{figure}[ht]
-% 		\centering
-% 		\includegraphics[width=0.8\textwidth]{/insertions/AVL_14-01-33-plot}
-% 		\caption{Test executed on Linux}
-% 	\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{/rotations/2026-07-08_13-16-08_AVL.png}
+    \caption{AVL rotation test}
+\end{figure}
 
 \subsection{Heights Tests}
 
@@ -233,6 +261,16 @@ The obtained results correctly reflected the theoretical concepts studied.
 \section{Conclusions}
 
 To conclude this project, we compared all the data structures we analyzed and drew conclusions regarding the ideal use cases for each type of tree.
+
+\subsection{Comparison of the Data Structures Analyzed}
+In this subsection, we analyze, for each tree, their strengths and weaknesses
+
+\begin{itemize}
+\item \textbf{BST}: we use this type of tree where fast insertion and deletion are the primary requirements and it is a necessity to avoid the computational overhead of rebalancing (even if the asymptotic time is the same, in real implementations the overhead does not amount to nothing). The data fed into the BST must be fed at ``random'', as to balance the BST naturally.
+
+\item \textbf{AVL}: we use this tree when we want to perform fast search lookups, as this is the tree that yields the lowest height, capping at $1.44 \cdot \log_2 (n+2)$ (cite proof). The main drawback of the tree is insertion time, as the rotations provide a lot of overhead, but this overhead is necessary to achieve better search performance.
+\item \textbf{RBT}: this balanced data structure is an excellent compromise between the two trees discussed above. They are particularly efficient during insertion, thanks to a careful and strictly limited use of rotations during the balancing procedures. Although this means the tree might not achieve the absolute minimum height, the search performance remains highly competitive, with an upper bound of $2 \cdot \log_2(n+1)$ (cite proof). Since it combines a fast insertion akin to a BST and a search almost as optimal as an AVL, it is suitable in systems requiring frequent searches and updates.
+\end{itemize}
 
 \subsection{Final Remarks}
 The comparison demonstrates that the additional complexity required to implement self-balancing trees is justified by the significant longterm gains in efficiency and robustness offered by these data structures. While a standard BST provides a simpler implementation and execution, it remains vulnerable to worst-case scenarios making it less reliable for large-scale datasets. Instead, choosing between an AVL and a RBT allows us to optimize the system based on whether the specific application requires fast searches or a balanced mix of frequent updates and lookups.
