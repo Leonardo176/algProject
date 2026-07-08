@@ -83,7 +83,7 @@ def heights_plot(n_max: int, *trees_type: TreeType):
         plt.plot(n_values, [x * 2 for x in log2_values], label="RBT upper bound", color="red", linestyle=":", linewidth=2) #In realtà doveva essere 2*log2(n+1), non con parametro n e basta
 
     plt.legend()
-    plt.title(f"{graph_name}: maximum height reached during 100 random insertions and deletions")
+    plt.title(f"{graph_name}: maximum height reached during over 100 random insertions")
     plt.grid(True)
 
     # Exporting plot file as .png

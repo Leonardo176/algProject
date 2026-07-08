@@ -11,6 +11,7 @@ from tests.setup_test import *
 
 # Generating plot in .png format and a .csv file in plots/rotations directory
 # Recorded data represent the number of rotations for each tree in trees_type, for different numbers of nodes n contained in the tree. For each one 100 insertions and deletions are performed. The recorded value is the median number of the rotations executed
+
 def rotations_plot(n_max: int, *trees_type: TreeType):
     # Enabling parallel execution using multiple processes
     executor = ProcessPoolExecutor(max_workers=3)
@@ -68,7 +69,7 @@ def rotations_plot(n_max: int, *trees_type: TreeType):
     f.close()
 
     plt.legend()
-    plt.title(f"{graph_name}: number of rotations during 100 random insertions and deletions")
+    plt.title(f"{graph_name}: number of rotations during over 100 random insertions")
     plt.grid(True)
 
     plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.png")
