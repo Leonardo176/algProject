@@ -11,7 +11,7 @@ from tests.setup_test import *
 
 
 # Generating plot in .png format and a .csv file in plots/insertions directory
-# Recorded data represent the execution time of a node insertion for each tree in trees_type, for different numbers of nodes n contained in the tree. For each one 100 insertions and deletions are performed. The final data The final recorded value is the median of the 100 measured execution times
+# Recorded data represent the execution time of a node insertion for each tree in trees_type, for different numbers of nodes n contained in the tree. For each one over 100 insertions and deletions are performed. The final recorded value is the median of the measured execution times for each n
 
 def insertion_plot(n_max: int, *trees_type: TreeType):
     # Enabling parallel execution using multiple processes
@@ -70,7 +70,7 @@ def insertion_plot(n_max: int, *trees_type: TreeType):
     f.close()
 
     plt.legend()
-    plt.title(f"{graph_name}: median insertions times on 100 insertions")
+    plt.title(f"{graph_name}: median insertions times on over 100 insertions")
     plt.grid(True)
 
     plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.png")
@@ -100,7 +100,7 @@ def _test_insertion(tree_type: TreeType, n_max: int, lista_val_n):
         # Creating array to record the measured execution times of each insertion
         insertion_times = []
 
-        # I will perform 100 insertions and deletions in a row for a representative median insertion time
+        # I will perform over 100 insertions and deletions in a row for a representative median insertion time
         for _ in range(100 + round(2 * math.sqrt(n))):
             # Generating index of the element to insert and to remove
             ins = rng.randint(n, len(values) - 1)

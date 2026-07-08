@@ -10,7 +10,7 @@ from statistics import median
 from tests.setup_test import *
 
 # Generating plot in .png format and a .csv file in plots/rotations directory
-# Recorded data represent the number of rotations for each tree in trees_type, for different numbers of nodes n contained in the tree. For each one 100 insertions and deletions are performed. The final data The final recorded value is the median of the 100 measured execution times
+# Recorded data represent the number of rotations for each tree in trees_type, for different numbers of nodes n contained in the tree. For each one 100 insertions and deletions are performed. The recorded value is the median number of the rotations executed
 def rotations_plot(n_max: int, *trees_type: TreeType):
     # Enabling parallel execution using multiple processes
     executor = ProcessPoolExecutor(max_workers=3)
@@ -114,8 +114,7 @@ def _test_rotations(tree_type: TreeType, n_max: int, lista_val_n):
 
             swap(values, rem, n)
 
-		#SCEGLIERE SE MEDIANO O MASSIMO, PRIMA DI INVIARE
-		# Adding durations list the maximum number of rotations, out of 100 insertions samples
+		# Adding to list_rotations the maximum number of rotations executed, out of 100 insertions samples
         rotations_counter.sort()
         list_rotations.append(median(rotations_counter))
 

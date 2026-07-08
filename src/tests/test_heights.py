@@ -5,13 +5,12 @@ import matplotlib.pyplot as plt
 
 from concurrent.futures import ProcessPoolExecutor
 from random import Random
-from statistics import median
 
 from tests.setup_test import *
 
 
 # Generating plot in .png format and a .csv file in plots/heights directory
-# Recorded data represent the maximum height reached for each tree in trees_type for different numbers of nodes n. For each one 100 insertions and deletions are performed
+# Recorded data represent the maximum height reached for each tree in trees_type for different numbers of nodes n. For each one over 100 insertions and deletions are performed. The final recorded value is the maximum height reached for each n
 
 def heights_plot(n_max: int, *trees_type: TreeType):
     # Enabling parallel execution using multiple processes
@@ -73,7 +72,7 @@ def heights_plot(n_max: int, *trees_type: TreeType):
     log2_values = [math.log2(n) for n in n_values]
 
     # Lower bound for the height of any binary tree
-    plt.plot(n_values, log2_values, label="Binary tree lower bound", color="black", linestyle=":", linewidth=2)
+    plt.plot(n_values, log2_values, label="Binary trees lower bound", color="black", linestyle=":", linewidth=1)
 
     # Upper bound for the height of AVL trees
     if TreeType.AVL in trees_type:        
@@ -114,8 +113,8 @@ def _test_heights(tree_type: TreeType, n_max: int, n_values):
         # Creating array to record the height reached by the tree after each insertion
         heights_reached = []
 
-        # I will perform 100 insertions and deletions in a row
-        for _ in range(100):
+        # I will perform over 100 insertions and deletions in a row
+        for _ in range(100 + round(2 * math.sqrt(n))):
             # Generating index of the element to insert and to remove
             ins = rng.randint(n, len(values) - 1)
             rem = rng.randint(0, n)
