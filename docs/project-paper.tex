@@ -7,7 +7,9 @@
 \usepackage{hyperref} % automatic pdf indexing
 \usepackage[backend=biber]{biblatex} % for sitography
 \addbibresource{references.bib}
+
 \setlength{\parindent}{0pt} %rientro testo annullato
+\setlength{\parskip}{10pt}
 % \usepackage{caption}
 % \captionsetup[table]{labelformat=empty} %per evitare scritta Table1,Table2, ecc
 
@@ -37,17 +39,18 @@ Binary search trees (BST) are among the most widely used data structures, since 
 
 
 \section{Theoretical Background}
-In all data structures implementing search trees, height is a fundamental property: keeping its value as small as possible helps ensure efficient operations thanks to more efficient search, insertion and deletion operations.
-\\[10pt]
+In all tree data structures, height is a fundamental property: keeping its value as small as possible helps ensure efficient operations thanks to more efficient search, insertion and deletion operations.
+
 Trees can be divided into two categories based on how they manage their height: \textbf{binary search trees} and \textbf{balanced binary trees}. Standard binary search trees do not actively control their height, while balanced binary trees use specific rules and rotation operations to keep the height as small as possible.
-\\[10pt]
-Trees belonging to the second category are designed to maintain a height close to the order of $\log_2(n)$, where $n$ is the number of nodes inserted into the tree.
-\\[10pt]
+
+Trees of the latter kind are designed to maintain a height close to the order of $\log_2(n)$, where $n$ is the number of nodes inserted into the tree.
+
+
 In this project, we studied three types of trees, two of which implement self-balancing techniques.
 
 \subsection{Binary Search Tree (BST)}
 
-Binary search trees do not impose any restrictions on their height. Their main purpose is to provide efficient search, insertion and deletion operations maintaining an ordered structure of the stored elements. However, since they do not include any mechanism to control their height, the tree can become unbalanced depending on the order in which nodes are inserted. As the number of nodes increases, this can lead to a significant degradation in performance, especially in the worst-case scenario.
+Binary search trees do not impose any restrictions on their height. Their purpose is to provide efficient search, insertion and deletion operations maintaining an ordered structure of the stored elements. However, since they do not include any mechanism to balance them, the tree can become unbalanced depending on the order in which nodes are inserted. If for example, nodes are inserted in an orderly manner, it will result in the Worst-Case complexity (which is listed below in asymptotic time), making the tree isomorphic to a linked list. So inserting values in a ``random'' order will yield better results.
 
 
 \begin{table}[ht]
@@ -68,10 +71,10 @@ Binary search trees do not impose any restrictions on their height. Their main p
 
 \subsection{Adelson-Velsky Landis Tree (AVL)}
 
-AVL trees are a data structure that implements self-balancing binary search trees. The search operation in the tree exactly mirrors the search in BST. Insertion initially uses the BST insertion method, with the difference that a self-balancing operation is performed afterward.
-\\[10pt]
-Specifically, this operation aims to identify imbalances in the tree by comparing the heights of two child nodes. Specifically, the goal is to keep total height as low as possible, so that search operations remain as close as possible to logarithmic complexity.
-\\[10pt]
+AVL trees are a data structure that implements self-balancing binary search trees. The search operation in the tree exactly mirrors the search in BST. Insertion initially uses the BST insertion method, with the difference that a self-balancing rotation is performed afterwards.
+
+Specifically, this operation aims to identify imbalances in the tree by comparing the heights of two child nodes. Specifically, the goal is to keep total height as low as possible, having an upper bound of $1.44 \cdot \log_2 (n+2)$(\textcite{adelson-velsky1962}). This yields better time complexity in search operations, however, its main drawback is insertion time, as rotations provide a lot of overhead, but this is necessary to achieve the aforementioned height.
+
 \begin{table}[ht]
   \centering
   \begin{tabular}{c|c|c}
@@ -87,21 +90,21 @@ Specifically, this operation aims to identify imbalances in the tree by comparin
 \end{table}
 \subsection{Red Black Tree (RBT)}
 An RBT is a self-balacing BST where every node is colored as red or black and satisfies certain conditions.
-So for each node we also have to keep track to its color. If T is a RBT, for all $n$ node of T, we call $color(n)$ its color.
+So for each node we also have to keep track to its color. If $T$ is a RBT, for all $n$ node of $T$, we call $color(n)$ its color.
 
-Let T be an BST where each node has a color associated ($color(n)$).
+Let $T$ a BST where each node has a color value associated ($color(n)$).
 
-T is a RBT $\iff$ T satisfies the following conditions:
+$T$ is a RBT $\iff$ $T$ satisfies the following conditions:
 \begin{itemize}
-\item Forall $n$ node in T, $color(n)$ must be either BLACK or RED (it must be a total function from the set of all nodes of T to \{BLACK, RED\})
+\item For all $n$ node in $T$, $color(n)$ must be either BLACK or RED (it must be a total function from the set of all nodes of T to \{BLACK, RED\})
 \item NIL leaves are considered black.
-\item For all red node $n$ in T, $n$ must not have a red child.
-\item Every path from a $n$ node in T to its descendant NIL leaves must contain the same number of black nodes.
+\item For all red nodes $n$ in $T$, $n$ must not have a red child.
+\item Every path from a $n$ node in $T$ to its descendant NIL leaves must contain the same number of black nodes.
 \end{itemize}
 
-For readonly operations (like search, inorder visit, etc...) nothing changes compared to BST.
-Instead functions for insertion and removal are adapted in a way that they keep the conditions listed above,
-so that an RBT remains an RBT when inserting or removing elements.
+For readonly operations (like search, inorder visit, etc...) we have the same complexity as BST. Instead, insertion and removal operations are augmented using two new helper functions whose main purpose is to mantain the properties of the RBT, using rotations like AVL Trees.
+
+These trees are a compromise between the aforementioned trees, as they yield efficient results even in insertion and deletion, due to their limited use of rotations during the balancing of the tree. Although this means that the tree might not achieve is absolute minimum height, as it has an upper bound of $2 \cdot \log_2 (n+1)$ (\textcite[332]{cormen2022}), which is slightly worse than the height of the AVL. Since this tree combines fast insertion akin to a BST and a search almost as optimal as an AVL. It is suitable in systems requiring frequent search and insert/delete operation
 
 \begin{table}[ht]
   \centering
@@ -231,18 +234,9 @@ The obtained results correctly reflected the theoretical concepts studied.
 
 To conclude this project, we compared all the data structures we analyzed and drew conclusions regarding the ideal use cases for each type of tree.
 
-\subsection{Comparison of the Data Structures Analyzed}
-In this subsection, we analyze, for each tree, their strengths and weaknesses
-
-\begin{itemize}
-\item \textbf{BST}: we use this type of tree where fast insertion and deletion are the primary requirements and it is a necessity to avoid the computational overhead of rebalancing (even if the asymptotic time is the same, in real implementations the overhead does not amount to nothing). The data fed into the BST must be fed at ``random'', as to balance the BST naturally.
-  
-\item \textbf{AVL}: we use this tree when we want to perform fast search lookups, as this is the tree that yields the lowest height, capping at $1.44 \cdot \log_2 (n+2)$ (cite proof). The main drawback of the tree is insertion time, as the rotations provide a lot of overhead, but this overhead is necessary to achieve better search performance.
-\item \textbf{RBT}: this balanced data structure is an excellent compromise between the two trees discussed above. They are particularly efficient during insertion, thanks to a careful and strictly limited use of rotations during the balancing procedures. Although this means the tree might not achieve the absolute minimum height, the search performance remains highly competitive, with an upper bound of $2 \cdot \log_2(n+1)$ (cite proof). Since it combines a fast insertion akin to a BST and a search almost as optimal as an AVL, it is suitable in systems requiring frequent searches and updates.
-\end{itemize}
-
 \subsection{Final Remarks}
 The comparison demonstrates that the additional complexity required to implement self-balancing trees is justified by the significant longterm gains in efficiency and robustness offered by these data structures. While a standard BST provides a simpler implementation and execution, it remains vulnerable to worst-case scenarios making it less reliable for large-scale datasets. Instead, choosing between an AVL and a RBT allows us to optimize the system based on whether the specific application requires fast searches or a balanced mix of frequent updates and lookups.
 
-\printbibliography[title={Sitography}]
+\printbibliography[title={Bibliography \& Sitography}]
+
 \end{document}
