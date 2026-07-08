@@ -1,10 +1,12 @@
 #!/bin/python3
+
 import sys
 
 if __name__ == "__main__":
     sys.stderr.write("[ERROR] This file is a module\n")
     exit(-1)
-    
+
+
 class Node:
     key: int
     left: "Node | None"

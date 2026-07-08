@@ -1,43 +1,49 @@
 #!/bin/python3
-import sys
 
-from trees.bst import BST, Node
+import sys
 
 if __name__ == "__main__":
     sys.stderr.write("[ERROR] This file is a module\n")
     exit(-1)
-    
+
+from trees.bst import BST, Node
+
+
+# AVLNode inherits from the BST Node class
 class AVLNode(Node):
     height: int | None
     parent: "AVLNode | None"
 
     def __init__(self, key: int, left: "AVLNode | None" = None, right: "AVLNode | None" = None):
         super().__init__(key, left, right)
-        self.height = 1 #Nuovo nodo altezza 1 da foglia
+        # Setting the initial height of an AVLNode to 1
+        self.height = 1
 
-def get_height(node : Node | None):
+# Returning the height of a node or 0 if the node is None
+def get_height(node : AVLNode | None):
     return node.height if node is not None else 0
 
-#Aggiorno la altezza basandomi su l'altezza dei figli
+# Updating the height of a node based on the height of its left and right children
 def update_height(node: AVLNode | None):
     if node is not None:
         node.height = 1 + max(get_height(node.left), get_height(node.right))
 
+
+# AVL class inherits fundamental operations from the BST class
 class AVL(BST):
     root: AVLNode | None
-    #La proprietà counter_rotations la contiene già la classe padre BST
 
     def __init__(self, root: AVLNode | None = None):
         super().__init__(root)
         self.root = root
 
-    #fattore bilancio di un singolo nodo
+    # Calculating the balance factor to detect AVL imbalance
     def balance_factor(self, node: Node | None):
         if node is None:
             return 0
-        #get_height ritorna 0 se il nodo è nullo
         return get_height(node.left) - get_height(node.right)
 
+	# Performing the same BST rotation while updating node heights to preserve AVL properties
     def rotate_right(self, target: Node | None):
         if target is None:
             return
@@ -45,10 +51,11 @@ class AVL(BST):
 
         BST.rotate_right(self, target)
 
-        #Aggiorno nodi usati e cambiati di posizione
+        # Updating height of node affected during rotation
         update_height(target)
         update_height(y)
 
+	# Performing the same BST rotation while updating node heights to preserve AVL properties
     def rotate_left(self, target: Node | None):
         if target is None:
             return
@@ -56,12 +63,14 @@ class AVL(BST):
 
         BST.rotate_left(self, target)
 
+		# Updating height of node used and moved during rotation
         update_height(target)
         update_height(y)
 
     def insert_key(self, key: int):
         return self._insert(AVLNode(key))
     
+	# Performing BST insertion and then restoring AVL balance through rotations
     def _insert(self, n: AVLNode):
         BST.insert(self, n)
 
@@ -69,31 +78,38 @@ class AVL(BST):
 
     def remove_key(self, key: int):
         target = self.find(key)
-        if target is None: #Previene cancellazione chiave che non esiste (non trovata)
+        if target is None:
             return
         else:
             self._remove(target)
 
+	# Performing BST removal while tracking the first affected ancestor, for AVL rebalancing
     def _remove(self, target: AVLNode):
+        # Start point consists on the parent of the node to remove
         start = target.parent
 
         if target.left is not None and target.right is not None:
-            succ_node = self.nxt(target) #Mi salvo il successore che troverà BST da sostituire al nodo
+			# Saving the successore node of the target
+            succ_node = self.nxt(target)
             
-            start = succ_node.parent  #qui è da dove parte ribilanciamento
+			# The balancing of the AVL will start from successors parent
+            start = succ_node.parent
 
+			# Prevents the start of balancing from a deleted node. This happens when the successor is direct (right) child of the target
             if target == start:
                 start = target.parent
 
         BST.remove(self, target)
         self.balance_avl(start)
-
-    def balance_avl(self, x ):
+	
+	# Restoring AVL balance properties
+    def balance_avl(self, x):
         while x is not None:
             update_height(x)
             
             balance_factor = self.balance_factor(x)
             
+			# Handling the four AVL imbalance cases based on the balance factor and child subtrees
             if balance_factor > 1:
                 if self.balance_factor(x.left) < 0:
                     self.rotate_left(x.left)
@@ -103,5 +119,5 @@ class AVL(BST):
                     self.rotate_right(x.right)
                 self.rotate_left(x)
                 
-            #Mi sposto in su, fin tanto che x è la radice, poi mi fermerò (vedi while)
+            # Move up to the root
             x = x.parent
