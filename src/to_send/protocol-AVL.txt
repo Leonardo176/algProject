@@ -1,0 +1,35 @@
+class TreeNode:
+    def __init__(self, key, left = None, right = None):
+        self.key = key
+        self.left = left
+        self.right = right
+        self.parent = None
+        if left is not None:
+            left.parent = self
+        if right is not None:
+            right.parent = self
+
+def height(node):
+    if node == None:
+        return 0
+    if getattr(node, "height", None) is None:
+        node.height = 1 + max(height(node.left), height(node.right))
+    return node.height
+
+def invalidate_height(node):
+    while node != None:
+        node.height = None
+        node = node.parent
+
+class BST:
+    # implementazione di un binary search tree dall'esercizio precedente
+
+class AVL(BST):
+    def __init__(self, root = None):
+        super().__init__(root)
+
+    def insert(self, node):
+        pass
+
+    def remove(self, node):
+        pass

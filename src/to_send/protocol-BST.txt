@@ -1,0 +1,44 @@
+class TreeNode:
+    def __init__(self, key, left = None, right = None):
+        self.key = key
+        self.left = left
+        self.right = right
+        self.parent = None
+        if left is not None:
+            left.parent = self
+        if right is not None:
+            right.parent = self
+
+
+class BST:
+    def __init__(self, root = None):
+        self.root = root
+    
+    def __str__(self):
+        if self.root == None:
+            return "NULL "
+        else:
+            return f"{self.root.key} " + BST(self.root.left).__str__() + BST(self.root.right).__str__()
+
+    def find(self, key):
+        pass
+
+    def nxt(self, node):
+        pass
+
+    def prv(self, node):
+        pass
+
+    def insert(self, node):
+        pass
+
+    def remove(self, node):
+        pass
+
+    def rotate_right(self, node):
+        pass
+
+    def rotate_left(self, node):
+        pass
+
+Questo è lo scheletro dei bst

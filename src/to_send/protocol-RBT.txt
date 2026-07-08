@@ -1,0 +1,26 @@
+class TreeNode:
+    def __init__(self, key, left = None, right = None):
+        self.key = key
+        self.left = left
+        self.right = right
+        self.parent = None
+        if left is not None:
+            left.parent = self
+        if right is not None:
+            right.parent = self
+
+def color(node):
+    return getattr(node, "color", "black") if node != None else "black"
+
+class BST:
+    # implementazione di un binary search tree dagli esercizi precedenti
+
+class RBTree(BST):
+    def __init__(self, root = None):
+        super().__init__(root)
+
+    def insert(self, node):
+        pass
+
+    def remove(self, node):
+        pass
