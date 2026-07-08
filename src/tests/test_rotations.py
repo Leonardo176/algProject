@@ -68,7 +68,7 @@ def rotations_plot(n_max: int, *trees_type: TreeType):
     f.close()
 
     plt.legend()
-    plt.title(f"{graph_name}: number of rotations times on over 100 insertions")
+    plt.title(f"{graph_name}: number of rotations during 100 random insertions and deletions")
     plt.grid(True)
 
     plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.png")
