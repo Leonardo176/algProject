@@ -1,0 +1,16 @@
+Tuxedo InfinityFlex Gen1
+Full specs: https://www.tuxedocomputers.com/en/TUXEDO-InfinityFlex-14-Gen1.tuxedo
+
+Type: Laptop
+
+CPU: Intel Core i5-1335U
+(10 Cores (2 Performance cores | 8 Efficient cores) | 12 Threads | Max. 4,6 GHz | 12 MB L3-Cache)
+
+RAM: 16GB DDR4-3200 MHz SO-DIMM Dual Channel
+
+Disk: Samsung SSD 980 500 GB
+
+On tests: fully charged and in charging
+
+Main OS: CachyOS
+OS for good tests: Archlinux Live ISO
