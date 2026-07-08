@@ -1,6 +1,9 @@
 # Corso di Algoritmi e Strutture Dati - Università degli Studi di Udine - A.A 2025-26
 # Progetto di Sebastiano Babich (172249), Leonardo Mazzon (172587) e Damiano Netto (171948)
 
+from enum import Enum
+
+
 class TreeNode:
     def __init__(self, key, left=None, right=None):
         self.key = key
@@ -18,10 +21,14 @@ class BST:
         self.root = root
 
     def __str__(self):
-        if self.root == None:
+        if self.root is None:
             return "NULL "
         else:
-            return f"{self.root.key} " + BST(self.root.left).__str__() + BST(self.root.right).__str__()
+            return (
+                f"{self.root.key} "
+                + BST(self.root.left).__str__()
+                + BST(self.root.right).__str__()
+            )
 
     def find(self, key):
         # Returns a BST node of a given key, otherwise it returns None
@@ -162,7 +169,6 @@ class BST:
         node.left = bubble_branch
         if bubble_branch is not None:
             bubble_branch.parent = node
-from enum import Enum
 
 
 class Direction(Enum):
@@ -241,12 +247,12 @@ class RBTree(BST):
     def insert_key(self, key):
         self.insert(TreeNode(key))
 
-    def insert(self, n):
+    def insert(self, node):
         # ensure that n is red
-        set_color(n, "red")
+        set_color(node, "red")
 
-        super().insert(n)
-        target = self.find(n.key)
+        super().insert(node)
+        target = self.find(node.key)
 
         assert target is not None
 
@@ -306,24 +312,24 @@ class RBTree(BST):
                 self.rotate_left(parent)
                 self.rotate_right(grandparent)
 
-    def remove(self, target):
-        if target is None:
+    def remove(self, node):
+        if node is None:
             return
 
-        if target.left is not None and target.right is not None:
-            nxt = self.nxt(target)
+        if node.left is not None and node.right is not None:
+            nxt = self.nxt(node)
             assert nxt is not None
 
-            key = target.key
-            target.key = nxt.key
+            key = node.key
+            node.key = nxt.key
             nxt.key = key
 
-            target = nxt
+            node = nxt
 
-        parent, c = target.parent, color(target)
-        db = target.left if target.left is not None else target.right
+        parent, c = node.parent, color(node)
+        db = node.left if node.left is not None else node.right
 
-        self._transplant(target, db)
+        self._transplant(node, db)
 
         if parent is None or (c == "red" and db is None):
             self._root_black()
