@@ -45,7 +45,7 @@ def heights_plot(n_max: int, *trees_type: TreeType):
         end_of_path += t.value + "_"
         heights[t] = futures[t].result()
 
-    graph_name = end_of_path.rstrip(", ")
+    graph_name = graph_name.rstrip(", ")
     end_of_path = end_of_path.rstrip("_")
     
     # Exporting data in .csv file, formatting the filename with the current timestamp to avoid overwriting on previous results
@@ -83,7 +83,7 @@ def heights_plot(n_max: int, *trees_type: TreeType):
         plt.plot(n_values, [x * 2 for x in log2_values], label="RBT upper bound", color="red", linestyle=":", linewidth=2) #In realtà doveva essere 2*log2(n+1), non con parametro n e basta
 
     plt.legend()
-    plt.title(f"{graph_name}: maximum height reached on 100 insertions and deletions")
+    plt.title(f"{graph_name}: maximum height reached on over 100 insertions and deletions")
     plt.grid(True)
 
     # Exporting plot file as .png

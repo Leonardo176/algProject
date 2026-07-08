@@ -46,7 +46,7 @@ def insertion_plot(n_max: int, *trees_type: TreeType):
         end_of_path += t.value + "_"
         durations[t] = futures[t].result()
 
-    graph_name = end_of_path.rstrip(", ")
+    graph_name = graph_name.rstrip(", ")
     end_of_path = end_of_path.rstrip("_")
     
     # Exporting data in .csv file, formatting the filename with the current timestamp to avoid overwriting on previous results
@@ -70,7 +70,7 @@ def insertion_plot(n_max: int, *trees_type: TreeType):
     f.close()
 
     plt.legend()
-    plt.title(f"{graph_name}: median insertions times on over 100 insertions")
+    plt.title(f"{graph_name}: median insertions time on over 100 insertions")
     plt.grid(True)
 
     plt.savefig(f"{path}{time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())}_{end_of_path}.png")
