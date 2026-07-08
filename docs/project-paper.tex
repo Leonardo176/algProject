@@ -231,21 +231,13 @@ The obtained results correctly reflected the theoretical concepts studied.
 To conclude this project, we compared all the data structures we analyzed and drew conclusions regarding the ideal use cases for each type of tree.
 
 \subsection{Comparison of the Data Structures Analyzed}
-
-The first important distinction we noticed was between simple binary search trees and self-balancing trees:
-
-%DA COMPLETARE
-\begin{itemize}
-\item \textbf{Non-Balanced Binary Trees}:
-\item \textbf{Balanced Binary Trees}:
-\end{itemize}
-
-The other distinctions are the use cases for each data structure implemented. To drew these conclusion we analyzed the results obtained in the many tests.
+In this subsection, we analyze, for each tree, their strengths and weaknesses
 
 \begin{itemize}
-\item \textbf{BST}: the best use case for this type of tree are contexts where fast insertion is the primary requirement and it is necessary to avoid the computational overhead of rebalancing. In a standard BST, inserting a new element is very straightforward because it only requires traversing the tree to find the correct position, without triggering any structural rotations. This results in an excellent time complexity, on the average case, of $\mathcal{O}(\log n)$ (where $n$ is the number of elements). However, the main drawback is that a standard BST does not guarantee balance. The worst scenario happens if the input data arrives sorted: the tree degenerates into a completely linear structure. In this case, both search and insertion performances drop significantly to $\mathcal{O}(n)$. Therefore, we would choose a BST for applications where the data is known to be random, or contexts where the dataset can be small enough that the complexity of maintaining a balanced tree is not actually necessary.
-\item \textbf{AVL}: for this type of balanced tree we observed a really good effort in maintaining height as low as possible, even if this results in an increased insertion time complexity. The slower insertion time, which is caused by frequent rebalancing operations, pays off significantly when searches are performed. The best-case scenario for using an AVL tree would be in systems where read operations are much more frequent than writes. In these cases we are accepting a slightly higher insertion time in exchange for really good search performance.
-\item \textbf{RBT}: this balanced data structure showed an excellent compromise between the two trees discussed above. Red-Black trees are particularly efficient during insertion operations, thanks to a careful and strictly limited use of rotations during the balancing procedures. Although this means the tree might not achieve the absolute minimum height, the search performance remains highly competitive, slightly higher than the one of AVL trees. We found many ideal use cases for this structure because it successfully combines the insertion speed of a standard BST with a search cost that is kept almost as low as an AVL. For this reason, we believe it could be a highly suitable structure to implement in systems requiring frequent searches and updates, and, more generally, in any context where maintaining a strong balance between insertion and search speed is key.
+\item \textbf{BST}: we use this type of tree where fast insertion and deletion are the primary requirements and it is a necessity to avoid the computational overhead of rebalancing (even if the asymptotic time is the same, in real implementations the overhead does not amount to nothing). The data fed into the BST must be fed at ``random'', as to balance the BST naturally.
+  
+\item \textbf{AVL}: we use this tree when we want to perform fast search lookups, as this is the tree that yields the lowest height, capping at $1.44 \cdot \log_2 (n+2)$ (cite proof). The main drawback of the tree is insertion time, as the rotations provide a lot of overhead, but this overhead is necessary to achieve better search performance.
+\item \textbf{RBT}: this balanced data structure is an excellent compromise between the two trees discussed above. They are particularly efficient during insertion, thanks to a careful and strictly limited use of rotations during the balancing procedures. Although this means the tree might not achieve the absolute minimum height, the search performance remains highly competitive, with an upper bound of $2 \cdot \log_2(n+1)$ (cite proof). Since it combines a fast insertion akin to a BST and a search almost as optimal as an AVL, it is suitable in systems requiring frequent searches and updates.
 \end{itemize}
 
 \subsection{Final Remarks}
