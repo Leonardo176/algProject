@@ -12,6 +12,7 @@ class TreeNode:
         if right is not None:
             right.parent = self
 
+
 def height(node):
     if node == None:
         return 0
@@ -23,10 +24,19 @@ def invalidate_height(node):
     while node != None:
         node.height = None
         node = node.parent
+        
+# Recursive height computation used for testing in the project
+def height_ric(node):
+    if node is None:
+        return 0
+    else:
+        return 1 + max(height_ric(node.left), height_ric(node.right))
 
 class BST:
     def __init__(self, root=None):
         self.root = root
+        # Used in testing of rotations
+        self.rotations_counter = 0
 
     def __str__(self):
         if self.root == None:
@@ -158,6 +168,8 @@ class BST:
         if bubble_branch is not None:
             bubble_branch.parent = node
 
+        self.rotations_counter += 1
+
     def rotate_right(self, node):
         if node is None or node.left is None:
             return
@@ -173,6 +185,8 @@ class BST:
         node.left = bubble_branch
         if bubble_branch is not None:
             bubble_branch.parent = node
+        
+        self.rotations_counter += 1
 
 
 # AVLNode extends the TreeNode class used by the BST

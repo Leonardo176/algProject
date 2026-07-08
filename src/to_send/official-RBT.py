@@ -3,7 +3,6 @@
 
 from enum import Enum
 
-
 class TreeNode:
     def __init__(self, key, left=None, right=None):
         self.key = key
@@ -16,19 +15,24 @@ class TreeNode:
             right.parent = self
 
 
+# Recursive height computation used for testing in the project
+def height_ric(node):
+    if node is None:
+        return 0
+    else:
+        return 1 + max(height_ric(node.left), height_ric(node.right))
+
 class BST:
     def __init__(self, root=None):
         self.root = root
+        # Used in testing of rotations
+        self.rotations_counter = 0
 
     def __str__(self):
-        if self.root is None:
+        if self.root == None:
             return "NULL "
         else:
-            return (
-                f"{self.root.key} "
-                + BST(self.root.left).__str__()
-                + BST(self.root.right).__str__()
-            )
+            return f"{self.root.key} " + BST(self.root.left).__str__() + BST(self.root.right).__str__()
 
     def find(self, key):
         # Returns a BST node of a given key, otherwise it returns None
@@ -154,6 +158,8 @@ class BST:
         if bubble_branch is not None:
             bubble_branch.parent = node
 
+        self.rotations_counter += 1
+
     def rotate_right(self, node):
         if node is None or node.left is None:
             return
@@ -169,6 +175,8 @@ class BST:
         node.left = bubble_branch
         if bubble_branch is not None:
             bubble_branch.parent = node
+        
+        self.rotations_counter += 1
 
 
 class Direction(Enum):
