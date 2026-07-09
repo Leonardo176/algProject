@@ -1,6 +1,7 @@
 import csv
 import math
 import time
+import os
 import matplotlib.pyplot as plt
 
 from concurrent.futures import ProcessPoolExecutor
@@ -26,6 +27,9 @@ def rotations_plot(n_max: int, *trees_type: TreeType):
     path = "plots/rotations/"
     end_of_path = ""
 
+    # create path if not exists
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    
     # Created a single plot containing all selected tree types
     plt.figure(figsize=(9, 5))
 
@@ -96,7 +100,7 @@ def _test_rotations(tree_type: TreeType, n_max: int, lista_val_n):
             tree.insert_key(values[i])
 
         # Creating array to record the measured number of rotations occured
-        rotations_counter = []
+        tree.rotations_counter = 0
 
         # I will perform 100 insertions and deletions in a row to get the number of rotations occured
         for _ in range(100 + round(2 * math.sqrt(n))):
@@ -108,16 +112,12 @@ def _test_rotations(tree_type: TreeType, n_max: int, lista_val_n):
 
             swap(values, n, ins)
 
-			# Saving in the array the number of rotations
-            rotations_counter.append(tree.rotations_counter)
-
             tree.remove_key(values[rem])
 
             swap(values, rem, n)
 
 		# Adding to list_rotations the maximum number of rotations executed, out of 100 insertions samples
-        rotations_counter.sort()
-        list_rotations.append(median(rotations_counter))
+        list_rotations.append(tree.rotations_counter)
 
     return list_rotations
 

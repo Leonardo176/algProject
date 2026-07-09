@@ -1,6 +1,7 @@
 import csv
 import math
 import time
+import os
 import matplotlib.pyplot as plt
 
 from concurrent.futures import ProcessPoolExecutor
@@ -25,6 +26,10 @@ def heights_plot(n_max: int, *trees_type: TreeType):
     graph_name = ""
     path = "plots/heights/"
     end_of_path = ""
+
+    # create path if not exists
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+
 
     # Created a single plot containing all selected tree types
     plt.figure(figsize=(9, 5))
