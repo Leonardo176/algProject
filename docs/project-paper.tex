@@ -207,6 +207,15 @@
 
         \subsection{Efficient Key Selection}
 
+        \subsubsection{Initializing array}
+
+        To ensure our insertion measurements accurately reflected a tree of a stable size $n$, we utilized an array of $n + 100 + 2\sqrt{n}$ elements containing the numbers from 0 to the length of the array. After initializing the array, we shuffled it using Python's rng.shuffle function (where rng = Random()). The first $n$ elements were dedicated to populating the tree up to the target size, while the remaining elements served as a measurement pool. Then we executed $100 + 2\sqrt{n}$ individual measurements.
+
+        \subsubsection{Selecting test elements}
+
+        For each measurement, we inserted a new element by selecting a random index from $n$ to the length of the array, and then swapped the element at index $n$ with that randomly selected index. To keep the constant tree size, we immediately removed an element by picking a random index from $0$ to $n$, subsequently swapping that selected index back to position $n$.
+
+        Implementing these two specific swaps is a crucial step in the methodology: it ensures a truly uniform distribution by making it entirely possible that the newly inserted element is also the exact same element randomly selected for removal during that measurement cycle.
 
         \subsection{Types of Tests Performed}
 
