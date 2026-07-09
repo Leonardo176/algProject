@@ -302,19 +302,25 @@
 
 		\begin{figure}[H]
 			\centering
-				\includegraphics[width=0.8\textwidth]{/rotations/2026-07-08_13-16-08_AVL.png}
+				\includegraphics[width=1\textwidth]{/rotations/2026-07-08_13-16-08_AVL.png}
 				\caption{AVL rotation test}
 		\end{figure}
 
     \subsection{Heights Tests}
 
-		
+		The tests we performed confirmed the theoretical expectations for each data structure: as the number of nodes increased, the maximum height reached by every tree followed a logarithmic trend during random keys insertions.
 
 		\begin{figure}[H]
 			\centering
-				\includegraphics[width=0.8\textwidth]{/heights/2026-07-08_13-12-14_AVL_BST_RBT.png}
-				\caption{AVL rotation test}
+				\includegraphics[width=1\textwidth]{/heights/2026-07-08_13-12-14_AVL_BST_RBT.png}
+				\caption{AVL, BST and RBT heights test}
 		\end{figure}
+
+		When comparing the standard Binary Search Tree with the self-balancing ones, an important difference is notable: the height of unbalanced trees grows much faster from the beginning, meanwhile AVL and RBT curves remain heavily compressed.
+
+		At our maximum sample size of $10^6$ nodes, the BST ended up being more than twice as tall as its balanced alternative versions. Meanwhile, the actual heights reached, by both self-balancing trees, remained consistently low and stable through most of the test run. This happened even though the RBT has a higher theoretical upper bound, due to a larger constant factor. 
+
+		These measurements gave us a practical understanding of how effectively self-balancing tecniques are able to control height during tree updates. As a direct consequence, the computational cost for any search operation is significantly optimized in AVL and RBT structures, compared to standard BST.
 
     \newpage
 
