@@ -208,7 +208,6 @@
         \subsection{Efficient Key Selection}
 
 
-
         \subsection{Types of Tests Performed}
 
             After analyzing the given task we identified the possibility of extending the required experiment with additional measurements related to the structural and behavioral metrics of the trees. To ensure a meaningful evaluation, we designed three distinct experimental analyses.
@@ -299,9 +298,9 @@
     Based on the benchmarking results in the above graph, we can see that the AVL, Red-Black Tree (RBT), and standard Binary Search Tree (BST) all exhibit a distinct logarithmic growth curve. This visual confirms that the average-case insertion time for all three data structures scales at $O(\log n)$. The clear vertical separation between the curves does not indicate different time complexity classes, but rather the varying \textbf{multiplicative constants} hidden within that $O(\log n)$ bound, driven primarily by their respective balancing overheads:
 
     \begin{itemize}
-    \item AVL Trees: AVL trees enforce the strictest balancing rules to ensure the tree remains perfectly shallow. However, this comes at a steep cost during insertion, as maintaining this strictness can require up to $O(\log n)$ structural rotations in the worst case. This heavy overhead explains why it has the highest multiplicative constant and the slowest insertion time.
-    \item RBT: RBTs compromise by using slightly looser balancing rules. They require fewer structural changes (a maximum of two rotations per insertion), which reduces the overhead and places their performance comfortably between the AVL and BST.
-    \item BST: The standard BST performs absolutely zero rotations and does not track balance factors. While a BST risks degrading into an $O(n)$ structure if fed sequential data, this graph clearly reflects uniformly distributed random insertions. Given a uniform data sample, a BST naturally distributes nodes well enough to remain relatively shallow on average. Stripped of all the computational weight of checking balances, recoloring, and rotating nodes, the naive BST proves highly efficient and clocks the fastest insertion times of the three.
+    \item AVL trees enforce the strictest balancing rules to ensure the tree remains perfectly shallow. However, this comes at a steep cost during insertion, as maintaining this strictness can require up to $O(\log n)$ structural rotations in the worst case. This heavy overhead explains why it has the highest multiplicative constant and the slowest insertion time.
+    \item RBTs compromise by using slightly looser balancing rules. They require fewer structural changes (a maximum of two rotations per insertion), which reduces the overhead and places their performance comfortably between the AVL and BST.
+    \item The standard BST performs absolutely zero rotations and does not track balance factors. While this tree risks degrading into an $O(n)$ structure if fed sequential data, this graph clearly reflects uniformly distributed random insertions. Given a uniform data sample, a BST naturally distributes nodes well enough to remain relatively shallow on average. Stripped of all the computational weight of checking balances, recoloring, and rotating nodes, the naive BST proves highly efficient and clocks the fastest insertion times of the three.
     \end{itemize}
 
 
