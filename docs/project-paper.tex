@@ -203,11 +203,11 @@
 
             In the tests we choose $min = 100$ and $k = 2$ as it was a good compromise.
 
-            So the number of tests for each $n_i$ is $100 + 2\sqrt n_i$.ù
+            So the number of tests for each $n_i$ is $100 + 2\sqrt n_i$.
 
         \subsection{Efficient Key Selection}
 
-			
+
 
         \subsection{Types of Tests Performed}
 
@@ -216,9 +216,9 @@
             \subsubsection{Insertion Time Measurements}
 
 				We needed to analyse the execution time required to perform insertion operations on the different tree implementations. For each value of \textit{n} we first generated a random tree containing \textit{n} nodes. Then, we performed a sequence of random insertions random insertions followed by deletions, as specified in the "Efficient Key Selection" paragraph above. The time required for each insertion operation was measured using Python's \textit{perf\_counter} function.
-				
+
 				The final value considered in the analysis was the median of the measured times, providing a stable estimation of the insertion costs, reducing the influence of large variations in the measurements.
-            
+
             \subsubsection{Rotations Count Measurements}
 
 				As a first additional analysis we decided to verify the number of rotations performed by self-balancing trees during update operations, since we expected it to be closely related to the execution times observed.
@@ -236,25 +236,25 @@
 				We then implemented a recursive function called \textit{height\_ric}, which computes the height of a tree starting from a given \textit{Node}. After each insertion operation we obtained the current height of the tree, starting from the root, and stored its value. At the end of each test, for each \textit{n}, the maximum height obtained was considered to be the representative value.
 
 		\subsection{Command-line Interface}
-			
+
 			For quick switching between different test configurations, we implemented a command-line interface based on flags.
-			
+
 			It allows the user to choose which benchmarks to execute (insertions, rotations, and/or height measurements), the tree implementations to test (BST, AVL, and/or RBT), and the maximum number of nodes to be considered. This approach avoids modifying the source code for each experiment and makes it easy to reproduce or customize the tests through simple command-line arguments.
 
 		\subsection{Parallel Execution}
-            
+
             From our initial analysis of the number of nodes to handle, it became evident that the execution performance would gradually degrade. The total volume of operations was huge, leading to execution times that were prohibitively long and inefficient for the amount of tests we needed to run.
 
             Therefore, it was necessary to adopt a strategy to accelerate the process. We opted to distribute the computational workload across different CPU cores using Python's \texttt{ProcessPoolExecutor}. This tool allowed us to assign the analysis of each tree structure to a different processing unit concurrently.
 
             As a result, the overall performance improved significantly. This simple but effective optimization reduced waiting times, allowing us to execute numerous tests.
-        
+
         \subsection{Data Visualization and Export}
 
             To clearly visualize the results of our experiments we generated graphs using Python's \texttt{matplotlib} library. In these plots, the horizontal axis represents the number of nodes in the tree, while the vertical axis represents the specific metric being evaluated, such as the median execution time, the number of performed rotations or the maximum height of the tree. Each coloured line in the graph corresponds to a different tree data structure, making it easy to visually compare their behavior as the input size increases.
-        
+
             Furthermore, to avoid losing any generated data or overwriting previous, the plots are saved as PNG images uniquely distinguishing each filename with a precise timestamp. Alongside the plots, the exact numerical values are also exported into CSV files. This double-saving ensured the preservation of both an immediate visual synthesis of the growth trends and the raw data necessary for any further numerical review.
-            
+
         \newpage
 
     \section{Results and Discussion}
@@ -274,7 +274,7 @@
 
             \begin{figure}[H]
                 \centering
-                \includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_13-06-48_AVL_BST_RBT.png}
+                \includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_12-53-52_AVL_BST_RBT.png}
                 \caption{Example of test executed in Archlinux with maximum priority}
             \end{figure}
 
@@ -288,21 +288,33 @@
 
     \subsection{Insertions Tests}
 
-		
 
-    	\begin{figure}[H]
-			\centering
-				\includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_13-14-26_AVL.png}
-				\caption{AVL insertion test}
-		\end{figure}
+
+       	\begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_13-06-48_AVL_BST_RBT.png}
+            \caption{Insertion test of all the trees}
+        \end{figure}
+
+    Based on the benchmarking results in the above graph, we can see that the AVL, Red-Black Tree (RBT), and standard Binary Search Tree (BST) all exhibit a distinct logarithmic growth curve. This visual confirms that the average-case insertion time for all three data structures scales at $O(\log n)$. The clear vertical separation between the curves does not indicate different time complexity classes, but rather the varying \textbf{multiplicative constants} hidden within that $O(\log n)$ bound, driven primarily by their respective balancing overheads:
+
+    \begin{itemize}
+    \item AVL Trees: AVL trees enforce the strictest balancing rules to ensure the tree remains perfectly shallow. However, this comes at a steep cost during insertion, as maintaining this strictness can require up to $O(\log n)$ structural rotations in the worst case. This heavy overhead explains why it has the highest multiplicative constant and the slowest insertion time.
+    \item RBT: RBTs compromise by using slightly looser balancing rules. They require fewer structural changes (a maximum of two rotations per insertion), which reduces the overhead and places their performance comfortably between the AVL and BST.
+    \item BST: The standard BST performs absolutely zero rotations and does not track balance factors. While a BST risks degrading into an $O(n)$ structure if fed sequential data, this graph clearly reflects uniformly distributed random insertions. Given a uniform data sample, a BST naturally distributes nodes well enough to remain relatively shallow on average. Stripped of all the computational weight of checking balances, recoloring, and rotating nodes, the naive BST proves highly efficient and clocks the fastest insertion times of the three.
+    \end{itemize}
+
+
+
+    To confirm the balancing overheads, we decided to keep track of all the rotations done by self-balancing threes.
 
     \subsection{Rotations Count Tests}
 
-		
+
 
 		\begin{figure}[H]
 			\centering
-				\includegraphics[width=1\textwidth]{/rotations/2026-07-08_13-16-08_AVL.png}
+				\includegraphics[width=1\textwidth]{/rotations/2026-07-08_12-08-46_AVL_BST_RBT.png}
 				\caption{AVL rotation test}
 		\end{figure}
 
@@ -318,7 +330,7 @@
 
 		When comparing the standard Binary Search Tree with the self-balancing ones, an important difference is notable: the height of unbalanced trees grows much faster from the beginning, meanwhile AVL and RBT curves remain heavily compressed.
 
-		At our maximum sample size of $10^6$ nodes, the BST ended up being more than twice as tall as its balanced alternative versions. Meanwhile, the actual heights reached, by both self-balancing trees, remained consistently low and stable through most of the test run. This happened even though the RBT has a higher theoretical upper bound, due to a larger constant factor. 
+		At our maximum sample size of $10^6$ nodes, the BST ended up being more than twice as tall as its balanced alternative versions. Meanwhile, the actual heights reached, by both self-balancing trees, remained consistently low and stable through most of the test run. This happened even though the RBT has a higher theoretical upper bound, due to a larger constant factor.
 
 		These measurements gave us a practical understanding of how effectively self-balancing tecniques are able to control height during tree updates. As a direct consequence, the computational cost for any search operation is significantly optimized in AVL and RBT structures, compared to standard BST.
 
@@ -329,7 +341,7 @@
         To conclude this project, we compared all the data structures we analyzed and drew conclusions regarding the ideal use cases for each type of tree.
 
     \subsection{Comparison of the Data Structures Analyzed}
-        
+
         In this subsection, we analyze, for each tree, their strengths and weaknesses
 
     \begin{itemize}
