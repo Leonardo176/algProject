@@ -182,7 +182,7 @@
         \end{aligned}
         \]
 
-        Then for each $n_i$, we need to choose how many test cases we want to make.
+        Then for each $n_i$, we needed to choose how many test cases we want to make.
 
         \subsection{Choosing number of test cases}
 
@@ -211,35 +211,35 @@
 
         \subsection{Types of Tests Performed}
 
-            Upon analyzing the task we were given, it was clear from the very beginning that there was space for further exploration of operations closely related to execution time. To ensure a meaningful evaluation, we designed three distinct experimental setups, each one targeting a specific structural or behavioral metric of the trees.
+            After analyzing the given task we identified the possibility of extending the required experiment with additional measurements related to the structural and behavioral metrics of the trees. To ensure a meaningful evaluation, we designed three distinct experimental analyses.
 
             \subsubsection{Insertion Time Measurements}
 
-				As the main experiment of the project we analyzed the execution time required to perform insertion operations on the different tree implementations.
-
-				For each value of \textit{n}, we first generated a random tree containing \textit{n} nodes. Then, we performed a sequence of random insertions and deletions, as specified in the "Efficient Key Selection" paragraph. The time required for each insertion operation was measured using Python's \textit{perf\_counter} function.
+				We needed to analyse the execution time required to perform insertion operations on the different tree implementations. For each value of \textit{n} we first generated a random tree containing \textit{n} nodes. Then, we performed a sequence of random insertions random insertions followed by deletions, as specified in the "Efficient Key Selection" paragraph above. The time required for each insertion operation was measured using Python's \textit{perf\_counter} function.
 				
-				Multiple insertion operations, as specified in the "Choosing number of test cases" paragraph, were executed for each value of \textit{n}. The final value considered in the analysis was the median of the measured times, providing a stable estimation of the insertion costs and reducing the influence of variations in the measurements.
+				The final value considered in the analysis was the median of the measured times, providing a stable estimation of the insertion costs, reducing the influence of large variations in the measurements.
             
             \subsubsection{Rotations Count Measurements}
 
-				As a first additional analysis, we decided to study the number of rotations performed by self-balancing trees during update operations.
+				As a first additional analysis we decided to verify the number of rotations performed by self-balancing trees during update operations, since we expected it to be closely related to the execution times observed.
 
 				Since every rotation operation is performed through the \textit{rotate\_left} and \textit{rotate\_right} methods, we decided to slightly modify these functions. We introduced a \textit{rotations\_counter} variable, initialized to 0 in the BST constructor, which is inherited by the other tree implementations. Then, every time a rotation is performed, the counter is incremented by one, allowing us to keep track of the total number of rotations executed.
 
-				After each insertion, the number of rotations executed during the operation was stored. The final value considered for the experiment was the median number of rotations among all performed operations.
+				After each insertion, the number of rotations executed during the operation was stored. The value considered for the experiment was the median number of rotations among all performed operations.
 
             \subsubsection{Heights Reached Measurements}
 
-				As a second extension of the project, we analyzed the height of the trees for different numbers of nodes, comparing the behavior of each implemented data structure. The goal was to evaluate how effectively each tree maintains a low height during various updates.
+				In the second extension of the project, we analysed the height of the trees generated, comparing the behavior of each implemented data structure. The goal was to evaluate how effectively each tree maintains a low height during various updates.
 
-				To perform this analysis, we used the fact that every implemented node type inherits its main features from the BST \textit{Node} class, allowing the same height calculation method to be applied to all three data structure implementations.
+				To perform this analysis we used the fact that every implemented node type inherits its main features from the BST \textit{Node} class, allowing the same height calculation method to be applied to all three data structure implementations.
 
-				We then implemented a recursive function called \textit{height\_ric}, which computes the height of a tree starting from a \textit{Node} given. After each insertion operation, we calculated the current height of the tree, starting from the root, and stored the value reached during the experiment. At the end of each test, the maximum height obtained was considered to be the representative value for that tree size.
+				We then implemented a recursive function called \textit{height\_ric}, which computes the height of a tree starting from a given \textit{Node}. After each insertion operation we obtained the current height of the tree, starting from the root, and stored its value. At the end of each test, for each \textit{n}, the maximum height obtained was considered to be the representative value.
 
 		\subsection{Command-line Interface}
 			
-			For fast switching between different test configurations, we implemented a command-line interface based on flags. This allows the user to choose which benchmarks to execute (insertions, rotations, and/or height measurements), the tree implementations to test (BST, AVL, and/or RBT), and the maximum number of nodes to be considered. This approach avoids modifying the source code for each experiment and makes it easy to reproduce or customize the tests through simple command-line arguments.
+			For quick switching between different test configurations, we implemented a command-line interface based on flags.
+			
+			It allows the user to choose which benchmarks to execute (insertions, rotations, and/or height measurements), the tree implementations to test (BST, AVL, and/or RBT), and the maximum number of nodes to be considered. This approach avoids modifying the source code for each experiment and makes it easy to reproduce or customize the tests through simple command-line arguments.
 
 		\subsection{Parallel Execution}
             
@@ -251,9 +251,9 @@
         
         \subsection{Data Visualization and Export}
 
-            To clearly visualize the results of our experiments, we generated graphs using Python's \texttt{matplotlib} library. In these plots, the horizontal axis represents the number of nodes in the tree, while the vertical axis represents the specific metric being evaluated, such as the median execution time, the number of performed rotations, or the maximum height of the tree. Each coloured line in the graph corresponds to a different tree data structure, making it easy to visually compare their behavior as the input size increases.
+            To clearly visualize the results of our experiments we generated graphs using Python's \texttt{matplotlib} library. In these plots, the horizontal axis represents the number of nodes in the tree, while the vertical axis represents the specific metric being evaluated, such as the median execution time, the number of performed rotations or the maximum height of the tree. Each coloured line in the graph corresponds to a different tree data structure, making it easy to visually compare their behavior as the input size increases.
         
-            Furthermore, to avoid losing any generated data or overwriting previous runs, the plots are saved as PNG images uniquely distinguishing each filename with a precise timestamp. Alongside the plots, the exact numerical values are also exported into CSV files. This double-saving ensures the preservation of both an immediate visual synthesis of the growth trends and the raw data necessary for any further numerical review.
+            Furthermore, to avoid losing any generated data or overwriting previous, the plots are saved as PNG images uniquely distinguishing each filename with a precise timestamp. Alongside the plots, the exact numerical values are also exported into CSV files. This double-saving ensured the preservation of both an immediate visual synthesis of the growth trends and the raw data necessary for any further numerical review.
             
         \newpage
 
@@ -288,7 +288,7 @@
 
     \subsection{Insertions Tests}
 
-		The obtained results allow us to compare the practical behavior of the different data structures and verify how the theoretical complexity of insertion operations is reflected in real execution times.
+		
 
     	\begin{figure}[H]
 			\centering
@@ -298,7 +298,7 @@
 
     \subsection{Rotations Count Tests}
 
-		The purpose of this analysis was to compare the different balancing strategies adopted by AVL and RBT. In particular, it allowed us to evaluate how frequently each structure needs to modify its shape in order to maintain its balancing properties.
+		
 
 		\begin{figure}[H]
 			\centering
@@ -308,7 +308,13 @@
 
     \subsection{Heights Tests}
 
-		The obtained results allowed us to compare the balancing strategies of the different trees. In particular, they show the effort required by AVL and RBT to keep their height close to the theoretical logarithmic bounds, compared to a simple Binary Search Tree, whose height can increase significantly depending on the insertion order.
+		
+
+		\begin{figure}[H]
+			\centering
+				\includegraphics[width=0.8\textwidth]{/heights/2026-07-08_13-12-14_AVL_BST_RBT.png}
+				\caption{AVL rotation test}
+		\end{figure}
 
     \newpage
 
