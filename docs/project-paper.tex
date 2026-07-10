@@ -359,16 +359,6 @@
 
         To conclude this project, we compared all the data structures we analyzed and drew conclusions regarding the ideal use cases for each type of tree.
 
-    \subsection{Comparison of the Data Structures Analyzed}
-
-        In this subsection, we analyze, for each tree, their strengths and weaknesses
-
-    \begin{itemize}
-        \item \textbf{BST}: we use this type of tree where fast insertion and deletion are the primary requirements and it is a necessity to avoid the computational overhead of rebalancing (even if the asymptotic time is the same, in real implementations the overhead does not amount to nothing). The data fed into the BST must be fed at ``random'', as to balance the BST naturally.
-        \item \textbf{AVL}: we use this tree when we want to perform fast search lookups, as this is the tree that yields the lowest height, capping at $1.44 \cdot \log_2 (n+2)$ (cite proof). The main drawback of the tree is insertion time, as the rotations provide a lot of overhead, but this overhead is necessary to achieve better search performance.
-        \item \textbf{RBT}: this balanced data structure is an excellent compromise between the two trees discussed above. They are particularly efficient during insertion, thanks to a careful and strictly limited use of rotations during the balancing procedures. Although this means the tree might not achieve the absolute minimum height, the search performance remains highly competitive, with an upper bound of $2 \cdot \log_2(n+1)$ (cite proof). Since it combines a fast insertion akin to a BST and a search almost as optimal as an AVL, it is suitable in systems requiring frequent searches and updates.
-        \end{itemize}
-
     \subsection{Final Remarks}
     The comparison demonstrates that the additional complexity required to implement self-balancing trees is justified by the significant longterm gains in efficiency and robustness offered by these data structures. While a standard BST provides a simpler implementation and execution, it remains vulnerable to worst-case scenarios making it less reliable for large-scale datasets. Instead, choosing between an AVL and a RBT allows us to optimize the system based on whether the specific application requires fast searches or a balanced mix of frequent updates and lookups.
 
