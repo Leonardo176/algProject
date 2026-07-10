@@ -329,14 +329,23 @@
 
     		\begin{figure}[H]
 			\centering
-				\includegraphics[width=1\textwidth]{/rotations/rotations_avl_bst_rbt.png}
+				\includegraphics[width=1\textwidth]{/rotations/2026-07-10_10-39-03_AVL_BST_RBT.png}
 				\caption{AVL, BST and RBT rotation test}
 		\end{figure}
 
                 Based on the results in the above graph, we can see that, as the number of nodes grows, the number of rotations on AVL and RBT does not differ much, however, we can see that the RBT is actually slightly better. This is due to the height handling in AVLNode, that doesn't happen in RBT due to the Color parameter.
 
-                Other than that, we can see that rotations on both trees follow a logarithmic pattern.
+                
 
+                Other than that, we can see that rotations on both trees follow a logarithmic pattern, in fact we used \texttt{numpy} to perform a logarithmic regression to approximate the above graph with a function (todo: replace graph with new graph), and, after computing this function is $f(n) = c \cdot \log (n) + b$, with constants $c = 1.5465480485189718$ and $b = 85.88523518736147 $ for AVL, and $c = 1.5976824067351296$ and $b = 86.90539968367709$ for RBT.
+                
+    		\begin{figure}[H]
+			\centering
+				\includegraphics[width=1\textwidth]{/rotations/regression-check-logscale2.png}
+				\caption{AVL, BST and RBT rotation in logarithmic scale and with logarithmic regression functions}
+		\end{figure}
+
+                
     \subsection{Heights Tests}
 
 		The tests we performed confirmed the theoretical expectations for each data structure: as the number of nodes increased, the maximum height reached by every tree followed a logarithmic trend during random keys insertions.

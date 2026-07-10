@@ -1,7 +1,7 @@
-./log_regression.py --csvpath ./plots/rotations/2026-07-09_18-47-37_AVL_BST_RBT.csv
+./log_regression.py  --csvpath "./plots/rotations/2026-07-10_10-39-03_AVL_BST_RBT.csv"
 AVL
-f(n) = 222.88257668810235 log(n) + -1689.3376803634023
+f(n) = 1.5465480485189718 log(n) + 85.88523518736147
 BST
 f(n) = 0.0 log(n) + 0.0
 RBT
-f(n) = 230.52858149972474 log(n) + -1750.1127836376818
+f(n) = 1.5976824067351296 log(n) + 86.90539968367709
