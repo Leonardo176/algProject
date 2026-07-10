@@ -32,7 +32,7 @@
     \section{Abstract}
 
         The goal of the project was to implement and compare some of the data structures studied in the “Algorithms and Data Structures” course at the University of Udine,
-        specifically standard and self-balancing binary search trees. The project focuses on analyzing the time complexity of insertion and deletion within these structures. We also analyzed the heights and rotations performed by the trees on our implementation, using configured test cases.
+        specifically standard and self-balancing binary search trees. The project focused on analyzing time complexity of insertion operation within these structures. We also analyzed the heights and rotations performed by each tree implemented, using configured test cases.
 
     \section{Introduction}
 
@@ -125,67 +125,68 @@
 
     \section{Implementation}
 
-        The data structures (BST, AVL and RBT) were implemented as separate modules in the project, with similar interfaces for insertion, deletion, and search. Each tree maintains additional information useful for analysis, such as current height and number of rotations. Balancing operations were separated into dedicated functions within each type of tree to comply with the rules imposed by the data structure used.
+		The data structures (BST, AVL and RBT) were implemented as separate modules in the project, with similar interfaces for insertion, deletion, and search operations. Each tree maintains additional information useful for analysis, such as a function to compute height and a rotations counter. Balancing operations were separated into dedicated functions within each type of self-balancing tree to comply with the rules imposed by the data structure used.
 
-        These are the main functionalities implemented for each tree:
+		These are the main functionalities implemented for each tree analyzed:
 
-    \textbf{BST (Binary Search Trees)}
-        \begin{itemize}
-            \item \textbf{Node implementation}: a \textit{Node} class has been implemented to store the key, the references to the left and right children, and a reference to the parent node. Each one of these could be another node, or null reference.
-            \item \textbf{Node insertion and deletion}: insertion and deletion operations are implemented according the standard algorithms of Binary Search Trees, maintaining the BST ordering property.
-            \item \textbf{Search operations}: efficient search, minimum, maximum, predecessor and successor operations are provided by exploiting the ordering property of the Binary Search Tree.
-            \item \textbf{Tree traversals operations}: inorder, preorder and postorder are implemented iteratively to permit the visit of each tree created.
-            \item \textbf{Tree rotations}: left and right rotation operations are implemented as fundamental  tree transformations. These operations are reused by the balanced tree implementations and a rotation counter is kept to be used in the experimental analysis.
-        \end{itemize}
+		\textbf{BST (Binary Search Trees)}
+			\begin{itemize}
+				\item \textbf{Node implementation}: a \textit{Node} class was implemented to store the key, references to the left and right children and a reference to the parent node. Each reference could be to another \textit{Node}, or be null.
+				\item \textbf{Node insertion and deletion}: insertion and deletion operations were implemented according to the standard algorithms for Binary Search Trees, while maintaining the BST ordering property.
+				\item \textbf{Search operations}: efficient search, minimum, maximum, predecessor and successor operations were implemented by exploiting the ordering property of Binary Search Trees.
+				\item \textbf{Tree traversals operations}: \textit{inOrder}, \textit{preOrder} and \textit{postOrder} traversals were implemented iteratively in order to permit the visit of each created tree.
+				\item \textbf{Tree rotations}: left and right rotation operations were implemented as fundamental tree transformations. These operations were used by balanced tree implementations to restore balance properties, while a rotation counter was maintained to be for experimental analysis.
+			\end{itemize}
 
-    \textbf{AVL (Adelson-Velsky Landis Trees)}
-        \begin{itemize}
-            \item \textbf{AVLNode implementation}: an \textit{AVLNode} class, extending the \textit{Node} class contained in BST, has been created. Each node stores an additional \textit{height} field, which is required to compute the balance factor.
-            \item \textbf{Balance factor computation}: the balance factor of each node is calculated as the difference between the heights of its left and right subtrees. That value is used to detect unbalanced configurations.
-            \item \textbf{Height management}: the height of each node is updated after insertions, deletions and rotations through the \textit{update\_height} function, avoiding the need of recomputing heights recursively.
-            \item \textbf{Node insertion and deletion}: insertion and deletion operations are implemented by extending the BST algorithms and performing the required rebalancing after each update, checking the balance\_factor calculated. The operations which can occour can be rotations in left or right direction.
-            \item \textbf{Tree rotations}: rotations are used as balancing operations to restore the AVL property after insertions and deletions. These operations are partially inherited from the BST class. Single and double rotations are selected according to the imbalance configuration detected by the balance factor.
-        \end{itemize}
+		\textbf{AVL (Adelson-Velsky Landis Trees)}
+			\begin{itemize}
+				\item \textbf{AVLNode implementation}: an \textit{AVLNode} class, extending the \textit{Node} class contained in BST, was created. Each node stores an additional \textit{height} attribute, which was required to compute the balance factor.
+				\item \textbf{Balance factor computation}: the balance factor of each node was calculated as the difference between the heights of its left and right subtrees. This value was used to detect unbalanced configurations.
+				\item \textbf{Height management}: the height of each node was updated after insertions, deletions and rotations through the \textit{update\_height} function, avoiding the need to recomputing heights recursively.
+				\item \textbf{Node insertion and deletion}: insertion and deletion operations were implemented by extending the BST algorithms and performing the required rebalancing after each update, checking the \textit{balance\_factor} calculated.
+				\item \textbf{Tree rotations}: rotations were used as balancing operations to restore the AVL property after each update operation. These operations were partially inherited from the BST class. Single and double rotations were then selected according to the imbalance configuration detected through the balance factor.
+			\end{itemize}
 
-    \textbf{RBT (Red-Black Trees)}
-        \begin{itemize}
-            \item \textbf{RBTNode implementation}: \textit{RBTNode} class has been created to extend \textit{Node} class contained in BST. Each node in fact stores an additional \textit{color} field, which can be either red or black, fundamental to maintain the red-black tree properties.
-            \item \textbf{Color management}: utility functions have been implemented to get, set and invert node colors. Missing children are considered black, simplifying the handling of boundary cases during insertion and deletion.
-            \item \textbf{Node insertion and deletion}: insertion and deletion are implemented by extending the standard BST functions. After each insertion or deletion, a rebalancing procedure is performed, involving recoloring operations and tree rotations. The required operations restore the red-black properties while preserving the BST ordering.
-            \item \textbf{Tree rotations}: left and right rotations inherited from BST are reused during the balancing procedures to modify the tree structure while preserving the ordering property.
-        \end{itemize}
+		\textbf{RBT (Red-Black Trees)}
+			\begin{itemize}
+				\item \textbf{RBTNode implementation}: an \textit{RBTNode} class was created to extend \textit{Node} class contained in BST. Each node stored an additional \textit{color} field, which could be either Red or Black, used to maintain the balancing properties.
+				\item \textbf{Color management}: utility functions were implemented to get, set and invert node colors. Missing children were considered black, simplifying the handling of boundary cases during update operations.
+				\item \textbf{Node insertion and deletion}: insertion and deletion were implemented by extending the standard BST functions. After each operation a rebalancing procedure was performed, involving recoloring operations and tree rotations. The required operations restore the Red-Black properties while preserving the BST ordering.
+				\item \textbf{Tree rotations}: left and right rotations inherited from BST were reused during the balancing procedures to modify the tree structure while preserving the ordering property.
+			\end{itemize}
 
     \newpage
 
     \section{Test Cases Setup}
 
         \subsection{Choosing appropriate input sizes}
-            The first issue to manage during the implementation of the test cases was the choice of the input sizes on which the experiments would be performed. We chose a wide range of tree sizes to make the simulation as realistic as possible, highlighting the performance differences among the different data structures.
-            \\[10pt]
-            A valid range of values for the number of nodes had to allow the analysis in multiple orders of magnitude. Instead of using a linear distribution of input sizes, which could have caused issues in tests on large numer of elements, a geometric progression was adopted in order to obtain a more uniform distribution on a logarithmic scale.
-            \\[10pt]
-            This approach allowed us to perform a better analysis of the growth trends of the different tree implementations.
-            \\[10pt]
-            These were the parameters selected:
+
+            The first issue to handle during the implementation of the test cases was the choice of the input sizes on which the experiments would be performed. We selected a wide range of tree sizes to make the simulation as meaningful as possible, highlighting the performance differences among the different type of trees used.
+            
+            A valid range of values for the number of nodes had to allow the analysis in multiple orders of magnitude. Instead of using a linear distribution of input sizes, which could have caused issues in tests on large number of elements, a geometric progression was adopted to obtain a more uniform distribution on a logarithmic scale.
+           
+			These were the parameters selected:
+
             \begin{align*}
                 n_{min} = 1000 && n_{max} = 1\, 000\, 000 && samples = 100
             \end{align*}
 
-        The list of input sizes is generated through the \textit{calc\_lista\_val\_n} function, which computes the values of $n$ using a geometric progression. The common ratio of the progression is defined as:
+			The list of input sizes was generated through the \textit{get\_n\_values} function, which computed the values of $n$ using a geometric progression. The common ratio of the progression was defined as:
 
-        \begin{align*}
-            n_i = \left\lfloor n_{min}\cdot c^i \right\rfloor && c = \left( \frac{n_{max}}{n_{min}} \right) ^ {(\frac{1}{samples - 1})}
-        \end{align*}
+			\begin{align*}
+				n_i = \left\lfloor n_{min}\cdot c^i \right\rfloor && c = \left( \frac{n_{max}}{n_{min}} \right) ^ {(\frac{1}{samples - 1})}
+			\end{align*}
 
-        The geometric progression produces a total of 100 samples, gradually increasing from the minimum value of nodes up to the maximum value. The first and last values of the sequence are reported below:
-        \[
-        \begin{aligned}
-            &1000,\ 1072,\ 1150,\ 1233,\ 1322,\ \dots,
-            \ 811\,131,\ 869\,749,\ 932\,603, 1\,000\,000
-        \end{aligned}
-        \]
-
-        Then for each $n_i$, we needed to choose how many test cases we want to make.
+			The geometric progression produced a total of 100 samples, gradually increasing from the minimum number of nodes $m_{min}$ up to the maximum number $n_max$ . The first and last values of the sequence are reported below:
+			
+			\[
+			\begin{aligned}
+				&1000,\ 1072,\ 1150,\ 1233,\ 1322,\ \dots,
+				\ 811\,131,\ 869\,749,\ 932\,603, 1\,000\,000
+			\end{aligned}
+			\]
+			
+			Then, for each $n_i$, the number of test cases to be performed had to be determined.
 
         \subsection{Choosing number of test cases}
 
@@ -337,8 +338,6 @@
 			\end{figure}
 
                 Based on the results in the above graph, we can see that, as the number of nodes grows, the number of rotations on AVL and RBT does not differ much, however, we can see that the RBT is actually slightly better. This is due to the height handling in AVLNode, that doesn't happen in RBT due to the Color parameter.
-
-                
 
                 Other than that, we can see that rotations on both trees follow a logarithmic pattern, in fact we used \texttt{numpy} to perform a logarithmic regression to approximate the above graph with a function (todo: replace graph with new graph), and, after computing this function is $f(n) = c \cdot \log (n) + b$, with constants $c = 1.5465480485189718$ and $b = 85.88523518736147 $ for AVL, and $c = 1.5976824067351296$ and $b = 86.90539968367709$ for RBT.
                 
