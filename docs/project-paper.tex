@@ -278,13 +278,22 @@
                 \caption{Example of test executed in Linux desktop}
             \end{figure}
 
-            To eliminate this systemic jitter, we shifted our testing environment to a lightweight, command-line-only Linux distro (we choose Arch Linux). By stripping away the graphical user interface and unnecessary background daemons, we drastically reduced the operating system's footprint. We also executed all testing processes with maximum priority, ensuring our tests received the highest possible CPU time. This strictly controlled environment successfully suppressed external interference and scheduler interruptions, yielding highly stable and reproducible execution times. As a result, all final measurements used in this comparative analysis were exclusively gathered under this optimized Arch Linux setup.
+            To eliminate this systemic jitter, we shifted our testing environment to a lightweight, command-line-only Linux distro (we choose Arch Linux). By stripping away the graphical user interface and unnecessary background daemons, we drastically reduced the operating system's footprint. We also executed all testing processes with maximum priority, ensuring our tests received the highest possible CPU time. This strictly controlled environment successfully suppressed external interference and scheduler interruptions, yielding highly stable and reproducible execution times.
 
             \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_12-53-52_AVL_BST_RBT.png}
                 \caption{Example of test executed in Archlinux with maximum priority}
             \end{figure}
+
+            Some details about the software used:
+
+            \begin{itemize}
+                \item OS: Archlinux Live ISO (2026.07.01)
+                \item Kernel version: 7.0.14
+                \item Scheduler used: Default (Completely Fair Scheduler)
+                \item Python version: 3.14.6
+            \end{itemize}
 
             Then for the hardware, we used a laptop always in charging with the following components:
 
@@ -294,9 +303,9 @@
                 \item Disk: Samsung SSD 980 500 GB
             \end{itemize}
 
+            All the tests below are done using this hardware and software, and executing the process with maximum priority.
+
     \subsection{Insertions Tests}
-
-
 
        	\begin{figure}[H]
             \centering
@@ -317,7 +326,7 @@
     To confirm the balancing overheads, we decided to keep track of all the rotations done by self-balancing threes.
 
     \subsection{Rotations Count Tests}
-    
+
     		\begin{figure}[H]
 			\centering
 				\includegraphics[width=1\textwidth]{/rotations/rotations_avl_bst_rbt.png}
