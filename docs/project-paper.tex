@@ -177,37 +177,40 @@
 				n_i = \left\lfloor n_{min}\cdot c^i \right\rfloor && c = \left( \frac{n_{max}}{n_{min}} \right) ^ {(\frac{1}{samples - 1})}
 			\end{align*}
 
-			The geometric progression produced a total of 100 samples, gradually increasing from the minimum number of nodes $m_{min}$ up to the maximum number $n_max$ . The first and last values of the sequence are reported below:
+			The geometric progression produced a total of 100 samples, gradually increasing from the minimum number of nodes $m_{min}$ up to the maximum number $n_{max}$ . 
 			
-			\[
-			\begin{aligned}
-				&1000,\ 1072,\ 1150,\ 1233,\ 1322,\ \dots,
-				\ 811\,131,\ 869\,749,\ 932\,603, 1\,000\,000
-			\end{aligned}
-			\]
+			\begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\textwidth]{/other/samples-number-generated.png}
+                \caption{Distribution of the generated input sizes $n_i$}
+            \end{figure}
 			
 			Then, for each $n_i$, the number of test cases to be performed had to be determined.
 
-        \subsection{Choosing number of test cases}
+        \subsection{Determining the number of test cases}
 
-            At the start we tried a constant number of test cases for each $n_i$.
-            But then we quickly realized that this didn't make much sense because if
-            the constant is too small, then for larger $n_i$ we wouldn't cover a good amount of cases,
-            but if the constant is too big, then for smaller $n_i$ we would make a lot of redundant test cases wasting time and resources.
+            At first, we considered using  a constant number of test cases for each $n_i$. However we quickly realized that this approach was not suitable: if
+            the constant was too small, larger values of $n_i$ would not have covered a good amount of cases. On the other hand if the constant was too big, smaller $n_i$ would have had a lot of redundant test cases increasing execution time and resources used.
 
-            So we changed it to be this function:
+            Then we adopted the following function to avoid previously mentioned issues:
 
-            \begin{equation}
-            f(n) = min + k \sqrt n
-            \end{equation}
+            \begin{align*}
+				f(n) = min + k \sqrt n
+			\end{align*}
 
-            The reason why we choose $\sqrt n$ is that it does not grow so big like $n$ that it will make the testing very inefficient (think when $n$ is 1000000)
-            but it is still big enough to cover a lot of cases (on n = 1000000, 1000 cases at least if $k \geq 1$).
-            The $min$ is needed so that we do at least $min$ tests for small $n$, and we choose $k$ if we want to do more or less tests.
+            The reason for choosing $\sqrt n$ was that it grows slower than a linear function, avoiding an excessive increase of test cases for large values of $n$. It also proved to be able to cover a sufficiently amount of test cases, in order to obtain meaningful results.
 
-            In the tests we choose $min = 100$ and $k = 2$ as it was a good compromise.
+            The $min$ parameter guaranteed a minimum number of test cases, even for small values of $n$. The $k$ value allowed the number of generated cases to be adjusted, according to the wanted level of testing.
 
-            So the number of tests for each $n_i$ is $100 + 2\sqrt n_i$.
+			In the tests, we chose $min = 100$ and $k = 2$, since they provided a sufficient number of test cases both for small and large values of $n$.
+
+			Then, the number of test cases generated for each $n_i$ was $100 + 2\sqrt n_i$.
+
+			\begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\textwidth]{/other/number-of-test-cases.png}
+                \caption{Number of test cases generated for each input size $n_i$}
+            \end{figure}
 
         \subsection{Efficient Key Selection}
 
