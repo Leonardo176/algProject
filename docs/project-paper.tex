@@ -35,8 +35,8 @@
 
     \section{Introduction}
 
-        Binary search trees (BST) are among the most widely used data structures, since they yield logarithmic asymptotic time in the average case of search, insertion and deletion. As the name suggests, each node in the tree has to have two children, each of which can either be another node or a null pointer. The height of a tree is defined as the number of edges in the longest path from the root to a leaf.
-        Two examples of applications of this type of data structure, regarding Red-Black Trees (self-balancing variation of BSTs, covered in our analysis), are \texttt{std::set}\cite{std_set} in C++ standard library and the \texttt{Completely Fair Scheduler}\cite{cfs_linux} used by the Linux kernel.
+        Binary search trees (BST) are among the most widely used data structures, since they yield logarithmic asymptotic time in the average case of search, insertion and deletion. As the name suggests, each node in the tree must have two children, each of which can either be another node or a null pointer. The height of a tree is defined as the number of edges in the longest path from the root to a leaf.
+        Two applications of this type of data structure, regarding Red-Black Trees (self-balancing variation of BSTs, covered in our analysis), are \texttt{std::set}\cite{std_set} in C++ standard library and the \texttt{Completely Fair Scheduler}\cite{cfs_linux} used by the Linux kernel.
 
     \section{Theoretical Background}
     
@@ -72,7 +72,7 @@
 
         AVL trees are a data structure implementing self-balancing binary search trees. The search operation exactly mirrors the search in a BST. Therefore, insertion and deletion initially use the corresponding BST method, followed by self-balancing rotations performed afterwards to restore the balance property.
         
-        Balance factor is a value used to check a node, understanding if it is balanced or not. Its value is calculated as the difference between the height of the left subtree and the height of the right subtree of the node. The factor of must be equal to $-1$, $0$, or $1$. If the value results outside the range, after any insertion or deletion, rotations are applied.
+        Balance factor is a value used to check a node, understanding if it is balanced or not. Its value is calculated as the difference between the height of the left subtree and the height of the right subtree of the node. Its value must be equal to $-1$, $0$, or $1$. If the value results outside the range, after any insertion or deletion, rotations are applied.
 
         The goal is to maintain a logarithmic height, having an upper bound of $1.44 \cdot \log_2 (n+2)$(\textcite{adelson-velsky1962}). This guarantees better time complexity in search operations. However, as rotations provide a lot of overhead, the main drawback is insertion time. However this results necessary to achieve the aforementioned height bound.
 
@@ -92,7 +92,7 @@
 
     \subsection{Red Black Tree (RBT)}
 
-        An RBT is a self-balacing BST where every node is colored as red or black, satisfying certain conditions. For each node we require to keep track of its color. If $T$ is a RBT, for all $n$ node of $T$, we call $color(n)$ its color.
+        An RBT is a self-balacing BST where every node is colored as red or black, satisfying certain conditions. For each node we require to keep track of its color. If $T$ is a RBT, for every node $n$ of $T$, we call $color(n)$ its color.
 
         Let $T$ a BST where each node has a color value associated ($color(n)$).
 
@@ -139,7 +139,7 @@
 
         \textbf{AVL (Adelson-Velsky Landis Trees)}
             \begin{itemize}
-                \item \textbf{AVLNode implementation}: an \textit{AVLNode} class, extending the \textit{Node} class contained in BST, was created. Each node stores an additional \textit{height} attribute, which was required to compute the balance factor.
+                \item \textbf{AVLNode implementation}: an \textit{AVLNode} class, extending the \textit{Node} class contained in BST, was created. Each node stored an additional \textit{height} attribute, which was required to compute the balance factor.
                 \item \textbf{Balance factor computation}: the balance factor of each node was calculated as the difference between the heights of its left and right subtrees. This value was used to detect unbalanced configurations.
                 \item \textbf{Height management}: the height of each node was updated after insertions, deletions and rotations through the \textit{update\_height} function, avoiding the need to recomputing heights recursively.
                 \item \textbf{Node insertion and deletion}: insertion and deletion operations were implemented by extending the BST algorithms and performing the required rebalancing after each update, checking the \textit{balance\_factor} calculated.
@@ -239,7 +239,7 @@
 
                 We introduced a \textit{rotations\_counter} variable initialized to 0 in the BST constructor, which was inherited by the other tree implementations. Since every rotation operation was performed through the BST's \textit{rotate\_left} and \textit{rotate\_right} methods, we decided to slightly modify these functions. Every time a rotation was performed, the counter was incremented by one, allowing us to keep track of the total number of rotations executed.
 
-                After each insertion and deletion, the number of rotations executed during these operation was stored. The value considered for the experiment was the number of rotations among all performed operations in 100 updates (insert+remove).
+                After each insertion and deletion, the number of rotations executed during these operation was stored. The value considered for the experiment was the total number of rotations performed during 100 update operations (insertions and deletions).
 
             \subsubsection{Heights Reached Measurements}
 
@@ -249,32 +249,31 @@
 
                 We then implemented a recursive function called \textit{height\_ric}, which computes the height of a tree starting from a given \textit{Node}. After each insertion operation we obtained the current height of the tree, starting from the root, and stored its value. At the end of each test, for each \textit{n}, the maximum height obtained was considered to be the representative value.
 
-        \subsection{Command-line Interface}
+        \subsection{Command-Line Interface}
 
-            For quick switching between different test configurations, we implemented a command-line interface based on flags.
-
-            It allows the user to choose which benchmarks to execute (insertions, rotations, and/or height measurements), the tree implementations to test (BST, AVL, and/or RBT), and the maximum number of nodes to be considered. This approach avoids modifying the source code for each experiment and makes it easy to reproduce or customize the tests through simple command-line arguments.
+            For quick switching between different test configurations, we implemented a command-line interface based on flags. It allowed us to choose which benchmarks to execute (insertions, rotations, and/or height measurements), the tree implementations to test (BST, AVL, and/or RBT), and the maximum number of nodes to be considered.
+            
+            This approach avoided modifying the source code for each experiment and made it easy to reproduce or customize the tests through simple command-line arguments.
 
         \subsection{Parallel Execution}
 
-            From our initial analysis of the number of nodes to handle, it became evident that the execution performance would gradually degrade. The total volume of operations was huge, leading to execution times that were prohibitively long and inefficient for the amount of tests we needed to run.
+            From our initial analysis of the number of nodes to process, it became evident that execution performance would gradually decrease. The total volume of operations was huge, leading to execution times that resulted prohibitively long and inefficient for the amount of tests we needed to perform.
 
-            Therefore, it was necessary to adopt a strategy to accelerate the process. We opted to distribute the computational workload across different CPU cores using Python's \texttt{ProcessPoolExecutor}. This tool allowed us to assign the analysis of each tree structure to a different processing unit concurrently.
+            It was necessary to adopt a strategy to accelerate the process. We opted to distribute the computational workload across different CPU cores using Python's \texttt{ProcessPoolExecutor}. This tool allowed us to assign the analysis of each tree structure to a different processing unit concurrently.
 
-            As a result, the overall performance improved significantly. This simple but effective optimization reduced waiting times, allowing us to execute numerous tests.
+            As a result, the overall performance improved significantly. This simple but effective optimization largely reduced computation times, allowing us to execute numerous tests.
 
         \subsection{Data Visualization and Export}
 
-            To clearly visualize the results of our experiments we generated graphs using Python's \texttt{matplotlib} library. In these plots, the horizontal axis represents the number of nodes in the tree, while the vertical axis represents the specific metric being evaluated, such as the median execution time, the number of performed rotations or the maximum height of the tree. Each coloured line in the graph corresponds to a different tree data structure, making it easy to visually compare their behavior as the input size increases.
+            To clearly visualize the results of our experiments we generated graphs using Python's \texttt{matplotlib} library. In these plots, the horizontal axis represents the number of nodes in the tree, while the vertical axis represents the specific metric being evaluated, such as the median execution time, the number of performed rotations or the maximum height of the tree. Each coloured line in the graph corresponds to a different tree analyzed, making it easy to visually compare their behavior as the input size increases.
 
-            Furthermore, to avoid losing any generated data or overwriting previous, the plots are saved as PNG images uniquely distinguishing each filename with a precise timestamp. Alongside the plots, the exact numerical values are also exported into CSV files. This double-saving ensured the preservation of both an immediate visual synthesis of the growth trends and the raw data necessary for any further numerical review.
+            To avoid losing any generated data, or overwriting previous, the plots were saved as PNG images uniquely identifying each filename by a precise timestamp. Alongside the plots, the exact numerical values was also exported into CSV files. This dual saving let us ensure the preservation of both an immediate visual synthesis of the growth trends and the raw data necessary for any further numerical review.
 
     \section{Results and Discussion}
 
         \subsection{Test Machine and OS}
 
             In our initial approach to benchmarking the insertion times of BST, AVL, and RBT, we ran our test suites on standard desktop operating systems like Windows and full-featured Linux distributions. Because our tests required precision at the microsecond scale, we quickly discovered that these environments introduced significant noise into our data. Standard operating systems manage hundreds of concurrent background processes, forcing the OS scheduler to frequently preempt our process. These relentless context switches, and suspension of our process, created unpredictable timing spikes that heavily obscured the true algorithmic performance of the trees.
-
 
             \begin{figure}[H]
                 \centering
@@ -321,7 +320,7 @@
 
         \begin{itemize}
             \item The standard BST performs absolutely zero rotations and does not track balance factors. While this tree risks degrading into an $O(n)$ structure if fed sequential data, this graph clearly reflects uniformly distributed random insertions. Given a uniform data sample, a BST naturally distributes nodes well enough to remain relatively shallow on average. Stripped of all the computational weight of checking balances, recoloring, and rotating nodes, the naive BST proves highly efficient and clocks the fastest insertion times of the three.
-            \item AVL trees enforces the strictest balancing rules to ensure the tree remaines perfectly shallow. However, this come at a steep cost during insertion, as maintaining this strictness could have require up to $O(\log n)$ structural rotations in the worst case. This heavy overhead explained why it had the highest multiplicative constant and the slowest insertion time.
+            \item AVL trees enforce the strictest balancing rules to ensure the tree remains perfectly shallow. However, this comes at a steep cost during insertion, as maintaining this strictness could require up to $O(\log n)$ structural rotations in the worst case. This heavy overhead explained why it had the highest multiplicative constant and the slowest insertion time.
             \item RBTs compromise by using slightly looser balancing rules. They require fewer structural changes (a maximum of two rotations per insertion), which reduces the overhead and places their performance comfortably between the AVL and BST.
         \end{itemize}
 
@@ -339,7 +338,7 @@
 
             Based on the results in the above graph, we can see that, as the number of nodes grows, the number of rotations on AVL and RBT does not differ much, however, we can see that the RBT is actually slightly better. This is due to the height handling in AVLNode, that doesn't happen in RBT due to the Color parameter.
 
-            Other than that, we observed that the number of rotations on both trees followed a logarithmic trend. To verify this observation, we used \texttt{numpy} to perform a logarithmic regression to approximate the above graph with a logarithmic function. After computing the resulting function revealed as 
+            Other than that, we observed that the number of rotations on both trees followed a logarithmic trend. To verify this observation, we used \texttt{numpy} to perform a logarithmic regression to approximate the above graph with a logarithmic function. The resulting function revealed as 
             
             \begin{align*}
                 f(n) = c \cdot \log (n) + b
@@ -354,7 +353,7 @@
 
             \begin{figure}[H]
             \centering
-                \includegraphics[width=1\textwidth]{/rotations/regression-check-logscale.png}
+                \includegraphics[width=1\textwidth]{/rotations/regression-check-logscale2.png}
                 \caption{Rotation tests in logarithmic scale}
             \end{figure}
 
@@ -372,13 +371,13 @@
 
         At our maximum sample size of $10^6$ nodes, the BST ended up being more than twice as tall as its balanced alternative versions. Meanwhile, the actual heights reached, by both self-balancing trees, remained consistently low and stable through most of the test run. This happened even though the RBT had an higher theoretical upper bound, due to a larger constant factor.
 
-        These measurements gave us a practical understanding on how effectively self-balancing tecniques are able to control height during tree updates. As a direct consequence, the computational cost for any search operation results significantly optimized in AVL and RBT structures, compared to standard BST.
+        These measurements gave us a practical understanding on how effectively self-balancing techniques are able to control height during tree updates. As a direct consequence, the computational cost for any search operation results significantly optimized in AVL and RBT structures, compared to standard BST.
 
     \newpage
 
     \section{Conclusions}
 
-        The comparison demonstrated that the additional complexity required to implement self-balancing trees was justified by the significant longterm gains in efficiency and robustness offered by these data structures. While a standard BST provides a simpler implementation and execution, it remains vulnerable to worst-case scenarios making it less reliable for large-scale datasets. Instead, choosing between an AVL and a RBT allows us to optimize the system based on whether the specific application requires fast searches or a balanced mix of frequent updates and lookups.
+        The comparison demonstrated that the additional complexity required to implement self-balancing trees was justified by the significant longterm gains in efficiency and robustness offered by these data structures. While a standard BST provides a simpler implementation and execution, it remains vulnerable to worst-case scenarios making it less reliable for large-scale datasets. Instead, choosing between an AVL and an RBT allows us to optimize the system based on whether the specific application requires fast searches or a balanced mix of frequent updates and lookups.
 
     \printbibliography[title={Bibliography \& Sitography}]
 
