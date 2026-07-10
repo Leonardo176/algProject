@@ -35,22 +35,22 @@
 
     \section{Introduction}
 
-        Binary search trees (BST) are among the most widely used data structures, since they yield logarithmic asymptotic time in the average case of search, insertion and deletion. As the name suggests, each node in the tree must have two children, each of which can either be another node or a null pointer. The height of a tree is defined as the number of edges in the longest path from the root to a leaf.
+        Binary search trees (BST) are among the most widely used data structures, since they yield logarithmic asymptotic time in the average case of search, insertion and deletion. As the name suggests, each node in the tree must have two children, each can either be another node or a null pointer. The height of a tree is defined as the number of edges in the longest path from the root to a leaf.
         Two applications of this type of data structure, regarding Red-Black Trees (self-balancing variation of BSTs, covered in our analysis), are \texttt{std::set}\cite{std_set} in C++ standard library and the \texttt{Completely Fair Scheduler}\cite{cfs_linux} used by the Linux kernel.
 
     \section{Theoretical Background}
     
-        In all tree data structures, height is a fundamental property: keeping its value as small as possible helps ensure efficient operations thanks to more efficient search, insertion and deletion operations.
+        In all tree based data structures, height is a fundamental property: keeping its value as small as possible helps ensure efficient operations thanks to more performant search, insertion and deletion.
 
-        Trees can be divided into two categories based on how they manage their height: \textbf{binary search trees} and \textbf{self-balancing binary search trees}. Standard binary search trees do not actively control their height, whereas self-balancing binary trees use specific rules and rotation operations to keep their height as low as possible while preserving balance.
+        Trees can be divided into two categories based on how they manage their height: \textbf{binary search trees} and \textbf{self-balancing binary search trees}. Standard binary search trees do not actively control their height, whereas self-balancing binary trees use specific rules and rotation operations to keep their height as low as possible, while preserving balance.
 
-        Trees of the latter kind are designed to maintain a height close to $\log_2(n)$, where $n$ is the number of nodes in the tree.
+        Trees of the latter kind are designed to maintain an height close to $\log_2(n)$, where $n$ is the number of nodes in the tree.
 
-        In this project, we studied three types of trees, two of which implement self-balancing techniques.
+        In this project we studied three types of trees, two of which implement self-balancing techniques.
 
     \subsection{Binary Search Tree (BST)}
 
-        Standard binary search trees do not impose any restrictions on their height. Their purpose is to provide efficient search, insertion and deletion operations maintaining an ordered structure of the stored elements. However, since they do not include any mechanism to balance themselves, the tree can become unbalanced depending on the order in which nodes are inserted. For example, inserting nodes in an sorted order leads to the Worst-Case complexity (reported below in terms of asymptotic time complexity), degenerating the tree structure to a linked list. Therefore, inserting values in a random order generally produces better results and performance.
+        Standard binary search trees do not impose any restrictions on their height. Their purpose is to provide efficient search, insertion and deletion operations maintaining an ordered structure of the stored elements. However, since they do not include any rotation mechanism, they can become unbalanced depending on the order in which nodes are inserted. For example, inserting nodes in a sorted order leads to the Worst-Case complexity (reported below in terms of asymptotic time complexity), degenerating the tree structure to a linked list. Therefore, inserting values in a random order generally produces better results and performance.
 
     \begin{table}[ht]
         \centering
@@ -70,11 +70,11 @@
 
     \subsection{Adelson-Velsky Landis Tree (AVL)}
 
-        AVL trees are a data structure implementing self-balancing binary search trees. The search operation exactly mirrors the search in a BST. Therefore, insertion and deletion initially use the corresponding BST method, followed by self-balancing rotations performed afterwards to restore the balance property.
+        AVL trees are a data structure implementing self-balancing binary search trees. The search operation exactly mirrors the search in a BST. Instead, insertion and deletion initially use the corresponding BST method, but might be followed by self-balancing rotations performed afterwards to restore the balance property.
         
-        Balance factor is a value used to check a node, understanding if it is balanced or not. Its value is calculated as the difference between the height of the left subtree and the height of the right subtree of the node. Its value must be equal to $-1$, $0$, or $1$. If the value results outside the range, after any insertion or deletion, rotations are applied.
+        Balance factor is a value used to check a node, understanding if it is balanced or not. Its value is calculated as the difference between the height of the left subtree and the height of the right subtree of the node. Its value must be in the integer interval $[-1,1]$. If, after any insertion or deletion, the value lands outside the range, rotations are applied.
 
-        The goal is to maintain a logarithmic height, having an upper bound of $1.44 \cdot \log_2 (n+2)$(\textcite{adelson-velsky1962}). This guarantees better time complexity in search operations. However, as rotations provide a lot of overhead, the main drawback is insertion time. However this results necessary to achieve the aforementioned height bound.
+        The goal is to maintain a logarithmic height, having an upper bound of $1.44 \cdot \log_2 (n+2)$ (\textcite{adelson-velsky1962}). This guarantees better time complexity in search operations. However, as rotations provide a lot of overhead, the main drawback is insertion time, but this is necessary to achieve the aforementioned height bound.
 
         \begin{table}[ht]
             \centering
@@ -92,21 +92,21 @@
 
     \subsection{Red Black Tree (RBT)}
 
-        An RBT is a self-balacing BST where every node is colored as red or black, satisfying certain conditions. For each node we require to keep track of its color. If $T$ is a RBT, for every node $n$ of $T$, we call $color(n)$ its color.
+        An RBT is a self-balacing BST where every node is colored as Red or Black, satisfying certain conditions. For each node we require to keep track of its color. If $T$ is a RBT, for every node $n$ of $T$, we call $color(n)$ its color.
 
         Let $T$ a BST where each node has a color value associated ($color(n)$).
 
         $T$ is a RBT $\iff$ $T$ satisfies the following conditions:
         \begin{itemize}
-            \item For all $n$ node in $T$, $color(n)$ must be either BLACK or RED (it must be a total function from the set of all nodes of T to \{BLACK, RED\})
+            \item For all $n$ node in $T$, $color(n)$ must be either RED or BLACK (it must be a total function from the set of all nodes of T to \{RED, BLACK\})
             \item NIL leaves are considered black.
             \item For all red nodes $n$ in $T$, $n$ must not have a red child.
             \item Every path from a $n$ node in $T$ to its descendant NIL leaves must contain the same number of black nodes.
         \end{itemize}
 
-        For read-only operations (like search, inorder visit, etc...) we have the same complexity as BST. Instead, insertion and removal operations are augmented using two new helper functions whose main purpose is to mantain the properties of the RBT, using rotations like AVL Trees.
+        For read-only operations (like search, inorder visit, etc...) we have the same complexity as BST. Instead, insertion and removal operations are augmented to mantain the properties of the RBT, using rotations like AVL Trees.
 
-        These trees are a compromise between the previously discussed trees, as they yield efficient results even in insertion and deletion, due to their limited use of rotations during the balancing process. Although this does not guarantee we might achieve an absolute minimum possible height, their height has an upper bound of $2 \cdot \log_2 (n+1)$ (\textcite[332]{cormen2022}), which is slightly higher than the one of the AVL. Since this structure combines fast insertion, similar to a BST, with a search performance close to AVL trees, it is suitable in systems requiring frequent search, insert and deletion operation.
+        These trees are a compromise between the previously discussed trees, as they yield efficient results even in insertion and deletion, due to their limited use of rotations during the balancing process. Although this does not yield the minimum possible height, it is bounded above by $2 \cdot \log_2 (n+1)$ (\textcite[332]{cormen2022}). Since this structure combines fast insertion similar to a BST, with a search performance close to AVL trees, it is suitable in systems requiring frequent search, insert and delete operations.
 
         \begin{table}[ht]
             \centering
@@ -124,33 +124,33 @@
 
     \section{Implementation}
 
-        The data structures (BST, AVL and RBT) were implemented as separate modules in the project, with similar interfaces for insertion, deletion, and search operations. Each tree maintains additional information useful for analysis, such as a function to compute height and a rotations counter. Balancing operations were separated into dedicated functions within each type of self-balancing tree to comply with the rules imposed by the data structure used.
+        The data structures (BST, AVL and RBT) were implemented as separate modules in the project, with similar interfaces for insertion, deletion, and search operations. Each tree maintains additional information useful for analysis, such as a function to compute height recursively and a rotations counter. Balancing operations were separated into dedicated functions within each type of self-balancing tree to comply with the rules imposed by the data structure used.
 
         These are the main functionalities implemented for each tree analyzed:
 
         \textbf{BST (Binary Search Trees)}
             \begin{itemize}
-                \item \textbf{Node implementation}: a \textit{Node} class was implemented to store the key, references to the left and right children and a reference to the parent node. Each reference could be to another \textit{Node}, or be null.
-                \item \textbf{Node insertion and deletion}: insertion and deletion operations were implemented according to the standard algorithms for Binary Search Trees, while maintaining the BST ordering property.
-                \item \textbf{Search operations}: efficient search, minimum, maximum, predecessor and successor operations were implemented by exploiting the ordering property of Binary Search Trees.
-                \item \textbf{Tree traversals operations}: \textit{inOrder}, \textit{preOrder} and \textit{postOrder} traversals were implemented iteratively in order to permit the visit of each created tree.
-                \item \textbf{Tree rotations}: left and right rotation operations were implemented as fundamental tree transformations. These operations were used by balanced tree implementations to restore balance properties, while a rotation counter was maintained to be for experimental analysis.
+                \item \textbf{Node implementation}: a \texttt{Node} class was implemented to store the key, references to the left and right children and a reference to the parent node. Each reference could be to another \texttt{Node}, or be null pointer.
+                \item \textbf{Node insertion and deletion}: these operations were implemented according to the standard algorithms for Binary Search Trees, while maintaining the BST ordering property.
+                \item \textbf{Search operations}: efficient search of Minimum, Maximum, Predecessor and Successor were implemented by exploiting the ordering property of Binary Search Trees.
+                \item \textbf{Tree traversals operations}: \texttt{inOrder}, \texttt{preOrder} and \texttt{postOrder} traversals were implemented iteratively in order to permit the visit of each created tree.
+                \item \textbf{Tree rotations}: left and right rotation were implemented as fundamental tree transformations. These operations were used by balanced tree implementations to restore balance properties, while a rotations counter was maintained to be used for experimental analysis.
             \end{itemize}
 
         \textbf{AVL (Adelson-Velsky Landis Trees)}
             \begin{itemize}
-                \item \textbf{AVLNode implementation}: an \textit{AVLNode} class, extending the \textit{Node} class contained in BST, was created. Each node stored an additional \textit{height} attribute, which was required to compute the balance factor.
+                \item \textbf{AVLNode implementation}: an \texttt{AVLNode} class, extending the \texttt{Node} class contained in BST, was created. Each node stored an additional \texttt{height} attribute, which was required to compute the balance factor.
                 \item \textbf{Balance factor computation}: the balance factor of each node was calculated as the difference between the heights of its left and right subtrees. This value was used to detect unbalanced configurations.
-                \item \textbf{Height management}: the height of each node was updated after insertions, deletions and rotations through the \textit{update\_height} function, avoiding the need to recomputing heights recursively.
-                \item \textbf{Node insertion and deletion}: insertion and deletion operations were implemented by extending the BST algorithms and performing the required rebalancing after each update, checking the \textit{balance\_factor} calculated.
+                \item \textbf{Height management}: the height of each node was updated after insertions, deletions and rotations through the \texttt{update\_height} function, avoiding the need to recomputing heights recursively.
+                \item \textbf{Node insertion and deletion}: these operations were implemented by extending the BST algorithms and performing the required rebalancing after each update, checking the \texttt{balance\_factor} calculated.
                 \item \textbf{Tree rotations}: rotations were used as balancing operations to restore the AVL property after each update operation. These operations were partially inherited from the BST class. Single and double rotations were then selected according to the imbalance configuration detected through the balance factor.
             \end{itemize}
 
         \textbf{RBT (Red-Black Trees)}
             \begin{itemize}
-                \item \textbf{RBTNode implementation}: an \textit{RBTNode} class was created to extend \textit{Node} class contained in BST. Each node stored an additional \textit{color} field, which could be either Red or Black, used to maintain the balancing properties.
+                \item \textbf{RBTNode implementation}: an \texttt{RBTNode} class was created to extend \texttt{Node} class contained in BST. Each node stored an additional \texttt{color} field, which could be either Red or Black, used to maintain the balancing properties.
                 \item \textbf{Color management}: utility functions were implemented to get, set and invert node colors. Missing children were considered black, simplifying the handling of boundary cases during update operations.
-                \item \textbf{Node insertion and deletion}: insertion and deletion were implemented by extending the standard BST functions. After each operation a rebalancing procedure was performed, involving recoloring operations and tree rotations. The required operations restore the Red-Black properties while preserving the BST ordering.
+                \item \textbf{Node insertion and deletion}: insertion and deletion were implemented by extending the standard BST functions. After each operation a rebalancing procedure was performed, involving recoloring operations and tree rotations. The required operations restored the Red-Black properties while preserving the BST ordering.
                 \item \textbf{Tree rotations}: left and right rotations inherited from BST were reused during the balancing procedures to modify the tree structure while preserving the ordering property.
             \end{itemize}
 
@@ -167,16 +167,16 @@
             These were the parameters selected:
 
             \begin{align*}
-                n_{min} = 1000 && n_{max} = 1\, 000\, 000 && samples = 100
+                n_{min} = 1000 && n_{max} = 1\, 000\, 000 && \text{samples} = 100
             \end{align*}
 
-            The list of input sizes was generated through the \textit{get\_n\_values} function, which computed the values of $n$ using a geometric progression. The common ratio of the progression was defined as:
+            The list of input sizes was generated through the \texttt{get\_n\_values} function, which computed the values of $n$ using a geometric progression. The common ratio of the progression was defined as:
 
             \begin{align*}
                 n_i = \left\lfloor n_{min}\cdot c^i \right\rfloor && c = \left( \frac{n_{max}}{n_{min}} \right) ^ {(\frac{1}{samples - 1})}
             \end{align*}
 
-            The geometric progression produced a total of 100 samples, gradually increasing from the minimum number of nodes $m_{min}$ up to the maximum number $n_{max}$ . 
+            The geometric progression produced a total of 100 samples, gradually increasing from the minimum number of nodes $n_{min}$ up to the maximum number $n_{max}$ . 
             
             \begin{figure}[H]
                 \centering
@@ -215,7 +215,7 @@
 
             \subsubsection{Initializing array}
 
-                To ensure the insertion measurements accurately reflected the behavior a tree with a stable size $n$, we used an array containing the numbers from 0 to $n + 100 + 2\sqrt{n}$, the length of the array. After initialization, the array was shuffled using Python's \textit{rng.shuffle} function, where \textit{rng} is an instance of \textit{Random} class. The first $n$ elements were inserted into the tree to reach the target size, while the remaining served as a measurement pool. A total of $100 + 2\sqrt{n}$ insertions measurements were performed.
+                To ensure the insertion measurements accurately reflected the behavior a tree with a stable size $n$, we used an array containing the numbers from 0 to $n + 100 + 2\sqrt{n}$, the length of the array. After initialization, the array was shuffled using Python's \texttt{rng.shuffle} function, where \texttt{rng} is an instance of \texttt{Random} class. The first $n$ elements were inserted into the tree to reach the target size, while the remaining served as a measurement pool. A total of $100 + 2\sqrt{n}$ insertions measurements were performed.
 
             \subsubsection{Selecting test elements}
 
@@ -229,51 +229,51 @@
 
             \subsubsection{Insertion Time Measurements}
 
-                We needed to analyse the execution time required to perform insertion operations on the different tree implementations. For each value of \textit{n} we first generated a random tree containing \textit{n} nodes. Then, we performed a sequence of random insertions random insertions followed by deletions, as specified in the "Efficient Key Selection" paragraph above. The time required for each insertion operation was measured using Python's \textit{perf\_counter} function.
+                We needed to analyse the execution time required to perform insertion operations on the different tree implementations. For each value of \texttt{n} we first generated a random tree containing \texttt{n} nodes. Then, we performed a sequence of random insertions followed by deletions, as specified in the ``Efficient Key Selection'' paragraph above. The time required for each insertion operation was measured using Python's \texttt{perf\_counter} function.
 
                 The final value considered in the analysis was the median of the measured times, providing a stable estimation of the insertion costs, reducing the influence of large variations in the measurements.
 
             \subsubsection{Rotations Count Measurements}
 
-                As a first additional analysis we decided to verify the number of rotations performed by self-balancing trees during update operations, since we expected it to be closely related to the execution times observed.
+                As a first additional analysis, we decided to verify the number of rotations performed by self-balancing trees during update operations, since we expected it to be closely related to the execution times observed.
 
-                We introduced a \textit{rotations\_counter} variable initialized to 0 in the BST constructor, which was inherited by the other tree implementations. Since every rotation operation was performed through the BST's \textit{rotate\_left} and \textit{rotate\_right} methods, we decided to slightly modify these functions. Every time a rotation was performed, the counter was incremented by one, allowing us to keep track of the total number of rotations executed.
+                We introduced a \texttt{rotations\_counter} variable initialized to 0 in the BST constructor, which was inherited by the other tree implementations. Since every rotation operation was performed through the BST's \texttt{rotate\_left} and \texttt{rotate\_right} methods, we decided to slightly modify these functions. Every time a rotation was performed, the counter was incremented by one, allowing us to keep track of the total number of rotations executed.
 
                 After each insertion and deletion, the number of rotations executed during these operation was stored. The value considered for the experiment was the total number of rotations performed during 100 update operations (insertions and deletions).
 
             \subsubsection{Heights Reached Measurements}
 
-                In the second extension of the project, we analysed the height of the trees generated, comparing the behavior of each implemented data structure. The goal was to evaluate how effectively each tree maintains a low height during various updates.
+                We also decided to analyze the height of the trees generated, comparing the behavior of each implemented data structure. The goal was to evaluate how effectively each tree maintained a low height during various updates.
 
-                To perform this analysis we used the fact that every implemented node type inherits its main features from the BST \textit{Node} class, allowing the same height calculation method to be applied to all three data structure implementations.
+                To perform this analysis we used the fact that every implemented node type inherits its main features from the BST \texttt{Node} class, allowing the same height calculation method to be applied to all three data structure implementations.
 
-                We then implemented a recursive function called \textit{height\_ric}, which computes the height of a tree starting from a given \textit{Node}. After each insertion operation we obtained the current height of the tree, starting from the root, and stored its value. At the end of each test, for each \textit{n}, the maximum height obtained was considered to be the representative value.
+                We then implemented a recursive function called \texttt{height\_ric}, which computes the height of a tree starting from a given \texttt{Node}. After each insertion operation we obtained the current height of the tree, starting from the root, and stored its value. At the end of each test, for each \texttt{n}, the maximum height obtained was considered to be the representative value.
 
         \subsection{Command-Line Interface}
 
-            For quick switching between different test configurations, we implemented a command-line interface based on flags. It allowed us to choose which benchmarks to execute (insertions, rotations, and/or height measurements), the tree implementations to test (BST, AVL, and/or RBT), and the maximum number of nodes to be considered.
+            To toggle between different test configurations efficiently, we implemented a command-line interface based on flags. It allowed us to choose which benchmarks to execute (insertions, rotations, and/or height measurements), the tree implementations to test (BST, AVL, and/or RBT), and the maximum number of nodes to be considered.
             
             This approach avoided modifying the source code for each experiment and made it easy to reproduce or customize the tests through simple command-line arguments.
 
         \subsection{Parallel Execution}
 
-            From our initial analysis of the number of nodes to process, it became evident that execution performance would gradually decrease. The total volume of operations was huge, leading to execution times that resulted prohibitively long and inefficient for the amount of tests we needed to perform.
+        From our initial analysis of the number of nodes to process, it became evident that execution performance would gradually decrease. The total volume of operations was huge, leading to execution times that resulted prohibitively long and inefficient for the amount of tests we needed to perform. It was necessary to adopt a strategy to accelerate the process.
 
-            It was necessary to adopt a strategy to accelerate the process. We opted to distribute the computational workload across different CPU cores using Python's \texttt{ProcessPoolExecutor}. This tool allowed us to assign the analysis of each tree structure to a different processing unit concurrently.
+        We opted to distribute the computational workload across different CPU cores using Python's \texttt{ProcessPoolExecutor}. This tool allowed us to assign the analysis of each tree structure to a different processing unit concurrently.
 
-            As a result, the overall performance improved significantly. This simple but effective optimization largely reduced computation times, allowing us to execute numerous tests.
+            As a result, the overall performance improved significantly. This effective optimization largely reduced computation times, allowing us to execute numerous tests.
 
         \subsection{Data Visualization and Export}
 
             To clearly visualize the results of our experiments we generated graphs using Python's \texttt{matplotlib} library. In these plots, the horizontal axis represents the number of nodes in the tree, while the vertical axis represents the specific metric being evaluated, such as the median execution time, the number of performed rotations or the maximum height of the tree. Each coloured line in the graph corresponds to a different tree analyzed, making it easy to visually compare their behavior as the input size increases.
 
-            To avoid losing any generated data, or overwriting previous, the plots were saved as PNG images uniquely identifying each filename by a precise timestamp. Alongside the plots, the exact numerical values was also exported into CSV files. This dual saving let us ensure the preservation of both an immediate visual synthesis of the growth trends and the raw data necessary for any further numerical review.
+            To avoid losing any generated data, or overwriting previous, the plots were saved as PNG images, uniquely identifying each filename by a precise timestamp. Alongside the plots, the exact numerical values was also exported into CSV files. This dual saving let us ensure the preservation of both an immediate visual synthesis of the growth trends and the raw data necessary for any further numerical review.
 
     \section{Results and Discussion}
 
         \subsection{Test Machine and OS}
 
-            In our initial approach to benchmarking the insertion times of BST, AVL, and RBT, we ran our test suites on standard desktop operating systems like Windows and full-featured Linux distributions. Because our tests required precision at the microsecond scale, we quickly discovered that these environments introduced significant noise into our data. Standard operating systems manage hundreds of concurrent background processes, forcing the OS scheduler to frequently preempt our process. These relentless context switches, and suspension of our process, created unpredictable timing spikes that heavily obscured the true algorithmic performance of the trees.
+            In our initial approach to benchmarking the insertion times of implemented trees, we ran our test suites on standard desktop operating systems like Windows and full-featured Linux distributions. Because our tests required precision at the microsecond scale, we quickly discovered that these environments introduced significant noise into our data. Standard operating systems manage hundreds of concurrent background processes, forcing the OS scheduler to frequently preempt our process. These relentless context switches created unpredictable timing spikes that heavily obscured the true algorithmic performance of the trees.
 
             \begin{figure}[H]
                 \centering
@@ -286,14 +286,14 @@
             \begin{figure}[H]
                 \centering
                 \includegraphics[width=0.8\textwidth]{/insertions/2026-07-08_12-53-52_AVL_BST_RBT.png}
-                \caption{Example of test executed in Archlinux with maximum priority}
+                \caption{Example of test executed in Arch Linux with maximum priority}
             \end{figure}
 
             Some details about the software used:
 
             \begin{itemize}
                 \item OS: Archlinux Live ISO (2026.07.01)
-                \item Kernel version: 7.0.14
+                \item Kernel version: 7.0.14-arch
                 \item Scheduler used: Default (Completely Fair Scheduler)
                 \item Python version: 3.14.6
             \end{itemize}
@@ -306,7 +306,7 @@
                 \item Disk: Samsung SSD 980 500 GB
             \end{itemize}
 
-            All the tests below are done using this hardware and software, and executing the process with maximum priority.
+            All the tests below were done using this hardware and software, and executing the process with maximum priority.
 
     \subsection{Insertions Tests}
 
@@ -316,17 +316,17 @@
             \caption{Insertion test of all the trees}
         \end{figure}
 
-        Based on the benchmarking results in the above graph, we noticed that AVL Trees, Red-Black Trees, and standard Binary Search Trees all exhibited a distinct logarithmic growth curve. This visual confirmed that the average-case insertion time for all three data structures would scale at $O(\log n)$. The clear vertical separation between the curves does not indicate different time complexity classes, but rather the varying \textbf{multiplicative constants} hidden within that $O(\log n)$ bound, driven primarily by their respective balancing overheads:
+        Based on the benchmarking results in the above graph, we noticed that AVL Trees, Red-Black Trees, and standard Binary Search Trees all exhibited a distinct logarithmic growth curve. This visual confirmed that the average-case insertion time for all three data structures would scale at $O(\log n)$. The clear vertical separation between the curves does not indicate different time complexity classes, but rather the varying multiplicative constants hidden within that $O(\log n)$ bound, driven primarily by their respective balancing overheads:
 
         \begin{itemize}
             \item The standard BST performs absolutely zero rotations and does not track balance factors. While this tree risks degrading into an $O(n)$ structure if fed sequential data, this graph clearly reflects uniformly distributed random insertions. Given a uniform data sample, a BST naturally distributes nodes well enough to remain relatively shallow on average. Stripped of all the computational weight of checking balances, recoloring, and rotating nodes, the naive BST proves highly efficient and clocks the fastest insertion times of the three.
             \item AVL trees enforce the strictest balancing rules to ensure the tree remains perfectly shallow. However, this comes at a steep cost during insertion, as maintaining this strictness could require up to $O(\log n)$ structural rotations in the worst case. This heavy overhead explained why it had the highest multiplicative constant and the slowest insertion time.
-            \item RBTs compromise by using slightly looser balancing rules. They require fewer structural changes (a maximum of two rotations per insertion), which reduces the overhead and places their performance comfortably between the AVL and BST.
+            \item RBT compromise by using slightly looser balancing rules. They require fewer structural changes (a maximum of two rotations per insertion), which reduces the overhead and places their performance comfortably between the AVL and BST.
         \end{itemize}
 
 
 
-    To confirm the balancing overheads, we decided to keep track of all the rotations done by self-balancing threes.
+    To confirm the balancing overheads, we also decided to keep track of all the rotations done by self-balancing trees.
 
     \subsection{Rotations Count Tests}
 
@@ -338,7 +338,7 @@
 
             Based on the results in the above graph, we can see that, as the number of nodes grows, the number of rotations on AVL and RBT does not differ much, however, we can see that the RBT is actually slightly better. This is due to the height handling in AVLNode, that doesn't happen in RBT due to the Color parameter.
 
-            Other than that, we observed that the number of rotations on both trees followed a logarithmic trend. To verify this observation, we used \texttt{numpy} to perform a logarithmic regression to approximate the above graph with a logarithmic function. The resulting function revealed as 
+            Other than that, we observed that the number of rotations on both trees followed a logarithmic trend. To verify this observation, we used \texttt{numpy}'s least squares method to perform a logarithmic regression to approximate the above graph with a logarithmic function. The resulting function revealed as 
             
             \begin{align*}
                 f(n) = c \cdot \log (n) + b
