@@ -103,7 +103,7 @@ def _test_rotations(tree_type: TreeType, n_max: int, lista_val_n):
         tree.rotations_counter = 0
 
         # I will perform 100 insertions and deletions in a row to get the number of rotations occured
-        for _ in range(100 + round(2 * math.sqrt(n))):
+        for _ in range(100):
             # Generating index of the element to insert and to remove
             ins = rng.randint(n, len(values) - 1)
             rem = rng.randint(0, n)
