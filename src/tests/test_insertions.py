@@ -1,3 +1,6 @@
+# Corso di Algoritmi e Strutture Dati - Università degli Studi di Udine - A.A 2025-26
+# Progetto di Sebastiano Babich (172249), Leonardo Mazzon (172587) e Damiano Netto (171948)
+
 import csv
 import math
 import time
@@ -124,7 +127,7 @@ def _test_insertion(tree_type: TreeType, n_max: int, lista_val_n):
 
             swap(values, rem, n)
 
-		# Adding durations list the median time of insertion, out of 100 insertions samples
+		# Adding to list_durations the median time of insertion, out of 100 insertions samples
         insertion_times.sort()
         list_durations.append(median(insertion_times))
 

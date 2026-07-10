@@ -1,3 +1,6 @@
+# Corso di Algoritmi e Strutture Dati - Università degli Studi di Udine - A.A 2025-26
+# Progetto di Sebastiano Babich (172249), Leonardo Mazzon (172587) e Damiano Netto (171948)
+
 import csv
 import math
 import time
@@ -133,7 +136,7 @@ def _test_heights(tree_type: TreeType, n_max: int, n_values):
             tree.remove_key(values[rem])
             swap(values, rem, n)
 
-        # Adding to all the heights the maximum height reached in all 100 insertions
+        # Adding to list_heights the maximum height reached in all 100 insertions
         list_heights.append(max(heights_reached))
 
     return list_heights

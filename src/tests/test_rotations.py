@@ -1,3 +1,6 @@
+# Corso di Algoritmi e Strutture Dati - Università degli Studi di Udine - A.A 2025-26
+# Progetto di Sebastiano Babich (172249), Leonardo Mazzon (172587) e Damiano Netto (171948)
+
 import csv
 import math
 import time
@@ -116,7 +119,7 @@ def _test_rotations(tree_type: TreeType, n_max: int, lista_val_n):
 
             swap(values, rem, n)
 
-		# Adding to list_rotations the maximum number of rotations executed, out of 100 insertions samples
+		# Adding to list_rotations the number of rotations executed, after 100 insertions and deletions samples
         list_rotations.append(tree.rotations_counter)
 
     return list_rotations

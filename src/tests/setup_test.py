@@ -1,3 +1,6 @@
+# Corso di Algoritmi e Strutture Dati - Università degli Studi di Udine - A.A 2025-26
+# Progetto di Sebastiano Babich (172249), Leonardo Mazzon (172587) e Damiano Netto (171948)
+
 from enum import Enum
 
 from trees.avl import AVL
